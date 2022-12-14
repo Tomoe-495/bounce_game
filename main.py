@@ -3,7 +3,7 @@ import sys
 
 w, h = 1000, 450
 W, H = w/10*8, h/10*8 
-FPS = 60
+FPS = 120
 
 pygame.init()
 clock = pygame.time.Clock()
