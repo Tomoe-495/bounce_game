@@ -192,8 +192,7 @@ def main():
 		for event in pygame.event.get():
 			if event.type == pygame.QUIT:
 				run = False
-				sys.exit()
-			
+
 			if event.type == pygame.KEYDOWN:
 				if event.key == pygame.K_UP:
 					ball.jump()
@@ -201,6 +200,9 @@ def main():
 					ball.right = True
 				if event.key == pygame.K_LEFT:
 					ball.left = True
+				if event.key == pygame.K_ESCAPE:
+					run = False
+
 				
 				if event.key == pygame.K_a:
 					bullet.left = True
@@ -233,6 +235,10 @@ def main():
 
 		bullet.update(ball.rect.x, ball.rect.y, move)
 		bullet.platform(move, tile.tiles)
+
+	pygame.quit()	
+	sys.exit()
+
 
 
 if __name__ == "__main__":
