@@ -46,15 +46,6 @@ class Tiles:
 
 	def draw(self):
 		win.blit(self.surf, (0 - self.scroll[0], 0 - self.scroll[1]))
-		# x = 0
-		# y = 0
-		# for line in self.map:
-		# 	for block in line:
-		# 		if block == "x":
-		# 			pygame.draw.rect(win, self.color, (x - self.scroll[0], y - self.scroll[1], self.size, self.size))
-		# 		x += self.size
-		# 	y += self.size
-		# 	x = 0
 	
 	def camera(self, ball):
 		speed = 10
@@ -84,10 +75,7 @@ class Ball:
 		pygame.draw.circle(win, self.color, (self.rect.x + (self.rect.width/2) - scroll[0], self.rect.y + (self.rect.height/2) - scroll[1]), self.size/10*7, 0)
 	
 	def size_change(self, plus=True):
-		if plus:
-			self.size += 1
-		else:
-			self.size -= 1
+		self.size = self.size + 1 if plus else self.size - 1
 
 		self.rect = pygame.Rect(self.rect.x, self.rect.y, self.size, self.size)
 
