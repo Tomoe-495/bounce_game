@@ -106,9 +106,9 @@ class Ball:
 		self.rect, collisions = move(self.rect, movement, tiles)
 
 		if collisions["bottom"]:
+			self.jump_count = 0
 			if self.vel > 2:
 				self.vel = -self.vel/2
-				self.jump_count = 0
 			else:
 				self.vel = 0
 
