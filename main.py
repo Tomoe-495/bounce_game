@@ -27,6 +27,9 @@ class Tiles:
 		self.map = get_map("map.txt")
 		self.tiles = []
 		self.scroll = [0, 0]
+		self.surf = pygame.Surface((self.size * (len(self.map[0])), self.size * (len(self.map))))
+		self.surf.set_colorkey((0, 0, 0))
+		self.ball_pos = [0, 0]
 
 		x = 0
 		y = 0
@@ -34,20 +37,24 @@ class Tiles:
 			for block in line:
 				if block == "x":
 					self.tiles.append(pygame.Rect(x, y, self.size, self.size))
+					pygame.draw.rect(self.surf, self.color, (x, y, self.size, self.size))
+				elif block == "o":
+					self.ball_pos = [x, y]
 				x += self.size
 			y += self.size
 			x = 0
 
 	def draw(self):
-		x = 0
-		y = 0
-		for line in self.map:
-			for block in line:
-				if block == "x":
-					pygame.draw.rect(win, self.color, (x - self.scroll[0], y - self.scroll[1], self.size, self.size))
-				x += self.size
-			y += self.size
-			x = 0
+		win.blit(self.surf, (0 - self.scroll[0], 0 - self.scroll[1]))
+		# x = 0
+		# y = 0
+		# for line in self.map:
+		# 	for block in line:
+		# 		if block == "x":
+		# 			pygame.draw.rect(win, self.color, (x - self.scroll[0], y - self.scroll[1], self.size, self.size))
+		# 		x += self.size
+		# 	y += self.size
+		# 	x = 0
 	
 	def camera(self, ball):
 		speed = 10
@@ -56,9 +63,9 @@ class Tiles:
 
 
 class Ball:
-	def __init__(self):
-		self.x = 65
-		self.y = 350
+	def __init__(self, pos):
+		self.x = pos[0]
+		self.y = pos[1]
 		self.size = 20
 		self.rect = pygame.Rect(self.x, self.y, self.size, self.size)
 		self.color = (35, 35, 35)
@@ -75,6 +82,14 @@ class Ball:
 
 	def draw(self, scroll):
 		pygame.draw.circle(win, self.color, (self.rect.x + (self.rect.width/2) - scroll[0], self.rect.y + (self.rect.height/2) - scroll[1]), self.size/10*7, 0)
+	
+	def size_change(self, plus=True):
+		if plus:
+			self.size += 1
+		else:
+			self.size -= 1
+
+		self.rect = pygame.Rect(self.rect.x, self.rect.y, self.size, self.size)
 
 	def update(self, movement):
 		if self.right:
@@ -169,7 +184,7 @@ def main():
 	run = True
 
 	tile = Tiles()
-	ball = Ball()
+	ball = Ball(tile.ball_pos)
 	bullet = Bullet(ball)
 
 	def draw():
@@ -202,6 +217,11 @@ def main():
 					ball.left = True
 				if event.key == pygame.K_ESCAPE:
 					run = False
+			
+				if event.key == pygame.K_q:
+					ball.size_change(False)
+				if event.key == pygame.K_e:
+					ball.size_change()
 
 				
 				if event.key == pygame.K_a:
