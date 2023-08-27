@@ -1,5 +1,5 @@
 import pygame
-from framework import move
+from framework import move, get_map
 import sys
 
 w, h = 1000, 450
@@ -13,11 +13,6 @@ dis = pygame.display.set_mode((w, h), 0, 32)
 win = pygame.Surface((W, H))
 pygame.display.set_caption("ball movements")
 
-
-def get_map(filename):
-	with open(filename, 'r') as f:
-		Map = f.read()
-		return Map.split("\n")
 
 class Tiles:
 	def __init__(self):

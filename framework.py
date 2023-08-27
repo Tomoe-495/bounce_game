@@ -1,3 +1,8 @@
+def get_map(filename):
+	with open(filename, 'r') as f:
+		Map = f.read()
+		return Map.split("\n")
+
 def collision_test(rect, tiles):
 	hit_list = []
 	for tile in tiles:
