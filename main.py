@@ -101,11 +101,6 @@ def main():
 				if event.key == pygame.K_ESCAPE:
 					run = False
 			
-				if event.key == pygame.K_q:
-					ball.size_change(False)
-				if event.key == pygame.K_e:
-					ball.size_change()
-
 				
 				if event.key == pygame.K_a:
 					bullet.left = True

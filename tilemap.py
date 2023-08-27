@@ -43,8 +43,6 @@ class Tiles:
 		for block in csv_map["intGridCsv"]:
 			if block == 1:
 				self.tiles.append(pygame.Rect(x, y, self.size, self.size))
-			elif block == 2:
-				self.ball_pos = [x, y]
 	
 			x += self.size
 
