@@ -27,15 +27,17 @@ class Tiles:
 		self.color = (255,255,255)
 		self.tiles = []
 		self.scroll = [0, 0]
-		self.ball_pos = [0, 0]
 		
 		map = get_map("map/map.ldtk")
+
+		pos = get_obj(map, "Player")["entityInstances"][0]
+		self.ball_pos = pos["px"]
 		
 		csv_map = get_obj(map, "Grid_set")
 		self.size = csv_map["__gridSize"]
 
 		self.layer1 = get_tile_layer(map, "Tiles", self.size)
-				
+
 		x = 0
 		y = 0
 		for block in csv_map["intGridCsv"]:

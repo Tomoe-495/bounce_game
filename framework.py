@@ -1,8 +1,13 @@
 import json
+import pygame
 
 def get_map(filename):
 	with open(filename, 'r') as f:
 		return json.load(f)
+	
+def scale_image(img, factor):
+    size = round(img.get_width() * factor), round(img.get_height() * factor)
+    return pygame.transform.scale(img, size)
 
 def collision_test(rect, tiles):
 	hit_list = []
