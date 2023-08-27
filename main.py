@@ -1,9 +1,11 @@
 import pygame
-from framework import move, get_map
+from framework import move
 import sys
+from tilemap import Tiles
 
 w, h = 1000, 450
-W, H = w/10*8, h/10*8 
+W, H = w/10*5, h/10*5 
+# W, H = w, h
 FPS = 60
 
 pygame.init()
@@ -12,41 +14,6 @@ clock = pygame.time.Clock()
 dis = pygame.display.set_mode((w, h), 0, 32)
 win = pygame.Surface((W, H))
 pygame.display.set_caption("ball movements")
-
-
-class Tiles:
-	def __init__(self):
-		self.color = (255,255,255)
-		self.w = 10
-		self.size = 25
-		self.map = get_map("map.txt")
-		self.tiles = []
-		self.scroll = [0, 0]
-		self.surf = pygame.Surface((self.size * (len(self.map[0])), self.size * (len(self.map))))
-		self.surf.set_colorkey((0, 0, 0))
-		self.ball_pos = [0, 0]
-
-		x = 0
-		y = 0
-		for line in self.map:
-			for block in line:
-				if block == "x":
-					self.tiles.append(pygame.Rect(x, y, self.size, self.size))
-					pygame.draw.rect(self.surf, self.color, (x, y, self.size, self.size))
-				elif block == "o":
-					self.ball_pos = [x, y]
-				x += self.size
-			y += self.size
-			x = 0
-
-	def draw(self):
-		win.blit(self.surf, (0 - self.scroll[0], 0 - self.scroll[1]))
-	
-	def camera(self, ball):
-		speed = 10
-		self.scroll[0] += (ball.rect.x - self.scroll[0] - W/2) / speed
-		self.scroll[1] += (ball.rect.y - self.scroll[1] - H/2) / speed
-
 
 class Ball:
 	def __init__(self, pos):
@@ -170,12 +137,13 @@ def main():
 	ball = Ball(tile.ball_pos)
 	bullet = Bullet(ball)
 
+
 	def draw():
-		win.fill((180, 30, 40))
+		win.fill((144, 244, 200))
 
 		bullet.draw(tile.scroll)
 		ball.draw(tile.scroll)
-		tile.draw()
+		tile.draw(win)
 
 		surf = pygame.transform.scale(win, (w, h))
 		dis.blit(surf, (0, 0))
@@ -231,7 +199,7 @@ def main():
 		movement = [0, 0]
 		move = [0, 0]
 
-		tile.camera(ball)
+		tile.camera(ball, [W, H])
 
 		ball.update(movement)
 		ball.platform(movement, tile.tiles)

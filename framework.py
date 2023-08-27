@@ -1,7 +1,8 @@
+import json
+
 def get_map(filename):
 	with open(filename, 'r') as f:
-		Map = f.read()
-		return Map.split("\n")
+		return json.load(f)
 
 def collision_test(rect, tiles):
 	hit_list = []
