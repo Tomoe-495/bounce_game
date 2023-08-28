@@ -37,6 +37,7 @@ class Tiles:
 		self.size = csv_map["__gridSize"]
 
 		self.layer1 = get_tile_layer(map, "Tiles", self.size)
+		self.layer2 = get_tile_layer(map, "Trees", self.size)
 
 		x = 0
 		y = 0
@@ -50,7 +51,9 @@ class Tiles:
 				y += self.size
 				x = 0
 
-	def draw(self, win):
+	def draw(self, win, ball):
+		win.blit(self.layer2, (0 - self.scroll[0], 0 - self.scroll[1]))
+		ball.draw(win, self.scroll)
 		win.blit(self.layer1, (0 - self.scroll[0], 0 - self.scroll[1]))
 	
 	def camera(self, ball, screen_size):

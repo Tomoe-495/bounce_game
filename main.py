@@ -5,7 +5,7 @@ from tilemap import Tiles
 from player import Ball
 
 w, h = 1000, 450
-W, H = w/10*5, h/10*5 
+W, H = w/10*4, h/10*4
 # W, H = w, h
 FPS = 60
 
@@ -74,8 +74,7 @@ def main():
 		win.fill((144, 244, 200))
 
 		bullet.draw(tile.scroll)
-		ball.draw(win, tile.scroll)
-		tile.draw(win)
+		tile.draw(win, ball)
 
 		surf = pygame.transform.scale(win, (w, h))
 		dis.blit(surf, (0, 0))
