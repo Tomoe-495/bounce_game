@@ -9,7 +9,7 @@ class Ball:
 		self.size = self.img.get_width()
 		self.size = 15
 		self.rect = pygame.Rect(self.x, self.y, self.size+1, self.size+1)
-		self.color = (35, 35, 35)
+		self.color = (45, 45, 45)
 		self.vel = 0
 		self.acc = 0.3
 		self.jump_limit = 1
@@ -18,7 +18,7 @@ class Ball:
 		self.right = False
 		self.left = False
 		self.speed = 0
-		self.max_speed = 4
+		self.max_speed = 3.5
 		self.ACC = 0.2
 		self.rotate = 0
 		

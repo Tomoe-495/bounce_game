@@ -5,8 +5,7 @@ from tilemap import Tiles
 from player import Ball
 
 w, h = 1000, 450
-W, H = w/10*4, h/10*4
-# W, H = w, h
+W, H = w/10*5, h/10*5
 FPS = 60
 
 pygame.init()

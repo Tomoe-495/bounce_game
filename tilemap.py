@@ -38,6 +38,8 @@ class Tiles:
 
 		self.layer1 = get_tile_layer(map, "Tiles", self.size)
 		self.layer2 = get_tile_layer(map, "Trees", self.size)
+		self.layer3 = get_tile_layer(map, 'Assets', self.size)
+		self.layer4 = get_tile_layer(map, "Background", self.size)
 
 		x = 0
 		y = 0
@@ -52,11 +54,13 @@ class Tiles:
 				x = 0
 
 	def draw(self, win, ball):
+		win.blit(self.layer4, (0 - self.scroll[0], 0 - self.scroll[1]))
 		win.blit(self.layer2, (0 - self.scroll[0], 0 - self.scroll[1]))
 		ball.draw(win, self.scroll)
+		win.blit(self.layer3, (0 - self.scroll[0], 0 - self.scroll[1]))
 		win.blit(self.layer1, (0 - self.scroll[0], 0 - self.scroll[1]))
 	
 	def camera(self, ball, screen_size):
 		speed = 10
 		self.scroll[0] += (ball.rect.x - self.scroll[0] - screen_size[0]/2) / speed
-		self.scroll[1] += (ball.rect.y - self.scroll[1] - screen_size[1]/2) / speed
+		self.scroll[1] += (ball.rect.y - self.scroll[1] - (screen_size[1]/10)*5) / speed
