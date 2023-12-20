@@ -5,8 +5,8 @@ class Ball:
 	def __init__(self, pos):
 		self.x = pos[0]
 		self.y = pos[1]
-		self.img = scale_image(pygame.image.load("img/ball.png"), 0.13)
-		self.size = self.img.get_width()
+		# self.img = scale_image(pygame.image.load("img/ball.png"), 0.13)
+		# self.size = self.img.get_width()
 		self.size = 15
 		self.rect = pygame.Rect(self.x, self.y, self.size+1, self.size+1)
 		self.color = (45, 45, 45)
@@ -18,7 +18,7 @@ class Ball:
 		self.right = False
 		self.left = False
 		self.speed = 0
-		self.max_speed = 3.5
+		self.max_speed = 4
 		self.ACC = 0.2
 		self.rotate = 0
 		
@@ -69,3 +69,18 @@ class Ball:
 
 		if collisions["top"]:
 			self.vel = 2
+	
+	def event(self, event):
+		if event.type == pygame.KEYDOWN:
+			if event.key == pygame.K_UP:
+				self.jump()
+			if event.key == pygame.K_RIGHT:
+				self.right = True
+			if event.key == pygame.K_LEFT:
+				self.left = True
+
+		if event.type == pygame.KEYUP:
+			if event.key == pygame.K_RIGHT:
+				self.right = False
+			if event.key == pygame.K_LEFT:
+				self.left = False

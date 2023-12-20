@@ -23,44 +23,50 @@ def get_tile_layer(map, layer, size):
 
 
 class Tiles:
-	def __init__(self):
+	def __init__(self, screen:tuple):
 		self.color = (255,255,255)
 		self.tiles = []
 		self.scroll = [0, 0]
+		self.screen = screen
 		
-		map = get_map("map/map.ldtk")
+		self.map = get_map("map/map.ldtk")
 
-		pos = get_obj(map, "Player")["entityInstances"][0]
-		self.ball_pos = pos["px"]
-		
-		csv_map = get_obj(map, "Grid_set")
-		self.size = csv_map["__gridSize"]
+		self.csv_map = get_obj(self.map, "Grid_set")
+		self.size = self.csv_map["__gridSize"]
 
-		self.layer1 = get_tile_layer(map, "Tiles", self.size)
-		self.layer2 = get_tile_layer(map, "Trees", self.size)
-		self.layer3 = get_tile_layer(map, 'Assets', self.size)
-		self.layer4 = get_tile_layer(map, "Background", self.size)
+		self.layerTiles = get_tile_layer(self.map, "Tiles", self.size)
+		self.layerTrees = get_tile_layer(self.map, "Trees", self.size)
+		self.layerAssets = get_tile_layer(self.map, 'Assets', self.size)
+		self.layerBackground = get_tile_layer(self.map, "Background", self.size)
 
 		x = 0
 		y = 0
-		for block in csv_map["intGridCsv"]:
+		for block in self.csv_map["intGridCsv"]:
 			if block == 1:
 				self.tiles.append(pygame.Rect(x, y, self.size, self.size))
 	
 			x += self.size
 
-			if x == csv_map["__cWid"] * self.size:
+			if x == self.csv_map["__cWid"] * self.size:
 				y += self.size
 				x = 0
 
+	scroll_speed = 10
+
+	def get_ball_pos(self):
+		pos = get_obj(self.map, "Player")["entityInstances"][0]
+		return pos["px"]
+
 	def draw(self, win, ball):
-		win.blit(self.layer4, (0 - self.scroll[0], 0 - self.scroll[1]))
-		win.blit(self.layer2, (0 - self.scroll[0], 0 - self.scroll[1]))
+		self.scroll[0] = 0 if self.scroll[0] < 0 else self.scroll[0]
+		self.scroll[1] = 0 if self.scroll[1] < 0 else self.scroll[1]
+
+		win.blit(self.layerBackground, (0 - self.scroll[0], 0 - self.scroll[1]))
+		win.blit(self.layerTrees, (0 - self.scroll[0], 0 - self.scroll[1]))
 		ball.draw(win, self.scroll)
-		win.blit(self.layer3, (0 - self.scroll[0], 0 - self.scroll[1]))
-		win.blit(self.layer1, (0 - self.scroll[0], 0 - self.scroll[1]))
+		win.blit(self.layerAssets, (0 - self.scroll[0], 0 - self.scroll[1]))
+		win.blit(self.layerTiles, (0 - self.scroll[0], 0 - self.scroll[1]))
 	
-	def camera(self, ball, screen_size):
-		speed = 10
-		self.scroll[0] += (ball.rect.x - self.scroll[0] - screen_size[0]/2) / speed
-		self.scroll[1] += (ball.rect.y - self.scroll[1] - (screen_size[1]/10)*5) / speed
+	def camera(self, ball):
+		self.scroll[0] += ( ball.x - self.scroll[0] - self.screen[0]/2 ) / self.scroll_speed
+		self.scroll[1] += ( ball.y - self.scroll[1] - self.screen[1]*0.6 ) / self.scroll_speed
