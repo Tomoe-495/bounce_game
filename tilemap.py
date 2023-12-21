@@ -8,9 +8,8 @@ def get_obj(map, obj):
 		if id["__identifier"] == obj:
 			return id
 		
-def get_tile_layer(map, layer, size):
+def get_tile_layer(map, layer, size, sprite):
 	map = get_obj(map, layer)
-	sprite = Sprite("map/map.png")
 	surf = pygame.Surface((size * map["__cWid"], size * map["__cHei"]))
 	surf.set_colorkey((0, 0, 0))
 	# incoming data format
@@ -24,25 +23,22 @@ def get_tile_layer(map, layer, size):
 
 class Tiles:
 	def __init__(self, screen:tuple):
-		self.color = (255,255,255)
 		self.tiles = []
 		self.scroll = [0, 0]
 		self.screen = screen
 		
-		self.map = get_map("map/map.ldtk")
+		self.map = get_map("map/swamp.ldtk")
+		self.sprite = Sprite("map/Terrain_and_Props.png")
 
 		self.csv_map = get_obj(self.map, "Grid_set")
 		self.size = self.csv_map["__gridSize"]
 
-		self.layerTiles = get_tile_layer(self.map, "Tiles", self.size)
-		self.layerTrees = get_tile_layer(self.map, "Trees", self.size)
-		self.layerAssets = get_tile_layer(self.map, 'Assets', self.size)
-		self.layerBackground = get_tile_layer(self.map, "Background", self.size)
+		self.layerTiles = get_tile_layer(self.map, "Tiles", self.size, self.sprite)
 
 		x = 0
 		y = 0
 		for block in self.csv_map["intGridCsv"]:
-			if block == 1:
+			if block != 0:
 				self.tiles.append(pygame.Rect(x, y, self.size, self.size))
 	
 			x += self.size
@@ -61,10 +57,7 @@ class Tiles:
 		self.scroll[0] = 0 if self.scroll[0] < 0 else self.scroll[0]
 		self.scroll[1] = 0 if self.scroll[1] < 0 else self.scroll[1]
 
-		win.blit(self.layerBackground, (0 - self.scroll[0], 0 - self.scroll[1]))
-		win.blit(self.layerTrees, (0 - self.scroll[0], 0 - self.scroll[1]))
 		ball.draw(win, self.scroll)
-		win.blit(self.layerAssets, (0 - self.scroll[0], 0 - self.scroll[1]))
 		win.blit(self.layerTiles, (0 - self.scroll[0], 0 - self.scroll[1]))
 	
 	def camera(self, ball):

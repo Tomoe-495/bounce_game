@@ -24,8 +24,8 @@ class Ball:
 		
 
 	def draw(self, win, scroll):
-		pygame.draw.circle(win, self.color, (self.rect.x + (self.rect.width/2) - scroll[0], self.rect.y + (self.rect.height/2) - scroll[1]), self.size/10*7, 0)
-		# pygame.draw.rect(win, (255, 255, 255), (self.rect.x  - scroll[0] - 3, self.rect.y  - scroll[1] - 3, 21, 21), 1)
+		pygame.draw.circle(win, self.color, (self.rect.x + (self.rect.width/2) - scroll[0], self.rect.y + (self.rect.height/2) - scroll[1]), self.size*0.7)
+		# pygame.draw.rect(win, (255, 255, 255), (self.rect.x  - scroll[0], self.rect.y  - scroll[1], self.rect.width, self.rect.height), 1)
 
 	def update(self, movement):
 		if self.right:

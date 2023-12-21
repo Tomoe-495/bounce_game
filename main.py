@@ -11,7 +11,7 @@ FPS = 60
 pygame.init()
 clock = pygame.time.Clock()
 
-scale = 0.50
+scale = 0.30
 w, h =  W * scale, H * scale
 
 dis = pygame.display.set_mode((W, H), pygame.FULLSCREEN)
@@ -26,8 +26,12 @@ def main():
 	ball = Ball(tile.get_ball_pos())
 	bullet = Bullet(ball.rect)
 
+	wall = pygame.Rect(w/2, 100, 100, 500)
+
 	def draw(win):
-		win.fill((100, 244, 200))
+		win.fill((155, 212, 245))
+
+		pygame.draw.rect(win, (144, 200, 244), (wall.x - tile.scroll[0]/20, wall.y - tile.scroll[1]/10, wall.width, wall.height))
 
 		bullet.draw(win, tile.scroll)
 		tile.draw(win, ball)
@@ -58,7 +62,7 @@ def main():
 			# 		mx, my = pygame.mouse.get_pos()
 			# 		ball.rect.x = mx
 			# 		ball.rect.y = my
-
+					
 		movement = [0, 0]
 		move = [0, 0]
 
