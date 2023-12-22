@@ -24,7 +24,7 @@ class Ball:
 		
 
 	def draw(self, win, scroll):
-		pygame.draw.circle(win, self.color, (self.rect.x + (self.rect.width/2) - scroll[0], self.rect.y + (self.rect.height/2) - scroll[1]), self.size*0.7)
+		pygame.draw.circle(win, self.color, (self.rect.x + (self.rect.width/2) - scroll[0], self.rect.y + (self.rect.height/2) - scroll[1]), self.size*0.75)
 		# pygame.draw.rect(win, (255, 255, 255), (self.rect.x  - scroll[0], self.rect.y  - scroll[1], self.rect.width, self.rect.height), 1)
 
 	def update(self, movement):
@@ -55,17 +55,23 @@ class Ball:
 			self.jump_count += 1
 
 	def platform(self, movement, tiles):
-		self.rect, collisions = move(self.rect, movement, tiles)
+		self.rect, collisions, ramp = move(self.rect, movement, tiles)
 
 		if collisions["bottom"]:
 			self.jump_count = 0
+
+			if ramp == "left":
+				self.speed += self.vel/2
+			elif ramp == "right":
+				self.speed -= self.vel/2
+
 			if self.vel > 2:
 				self.vel = -self.vel/2
 			else:
 				self.vel = 0
 
-		if collisions["left"] or collisions["right"]:
-			self.speed = -self.speed/2
+		# if collisions["left"] or collisions["right"]:
+		# 	self.speed = -self.speed/2
 
 		if collisions["top"]:
 			self.vel = 2

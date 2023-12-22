@@ -3,9 +3,8 @@ from framework import move
 import sys
 from tilemap import Tiles
 from player import Ball
-from bullet import Bullet
 
-W, H = 1366, 768
+W, H = 1000, 700
 FPS = 60
 
 pygame.init()
@@ -14,7 +13,7 @@ clock = pygame.time.Clock()
 scale = 0.30
 w, h =  W * scale, H * scale
 
-dis = pygame.display.set_mode((W, H), pygame.FULLSCREEN)
+dis = pygame.display.set_mode((W, H), 0, 32)
 win = pygame.Surface((w, h))
 pygame.display.set_caption("ball movements")
 
@@ -24,7 +23,6 @@ def main():
 
 	tile = Tiles((w, h))
 	ball = Ball(tile.get_ball_pos())
-	bullet = Bullet(ball.rect)
 
 	wall = pygame.Rect(w/2, 100, 100, 500)
 
@@ -33,7 +31,6 @@ def main():
 
 		pygame.draw.rect(win, (144, 200, 244), (wall.x - tile.scroll[0]/20, wall.y - tile.scroll[1]/10, wall.width, wall.height))
 
-		bullet.draw(win, tile.scroll)
 		tile.draw(win, ball)
 
 		surf = pygame.transform.scale(win, (W, H))
@@ -51,7 +48,6 @@ def main():
 				run = False
 			
 			ball.event(event)
-			bullet.event(event)
 
 			if event.type == pygame.KEYDOWN:
 				if event.key == pygame.K_ESCAPE:
@@ -70,9 +66,6 @@ def main():
 
 		ball.update(movement)
 		ball.platform(movement, tile.tiles)
-
-		bullet.update(ball.rect.x, ball.rect.y, move)
-		bullet.platform(move, tile.tiles)
 
 	pygame.quit()	
 	sys.exit()

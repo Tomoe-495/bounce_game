@@ -39,7 +39,7 @@ class Tiles:
 		y = 0
 		for block in self.csv_map["intGridCsv"]:
 			if block != 0:
-				self.tiles.append(pygame.Rect(x, y, self.size, self.size))
+				self.tiles.append([pygame.Rect(x, y, self.size, self.size), block])
 	
 			x += self.size
 
@@ -59,6 +59,9 @@ class Tiles:
 
 		ball.draw(win, self.scroll)
 		win.blit(self.layerTiles, (0 - self.scroll[0], 0 - self.scroll[1]))
+
+		# for tile in self.tiles:
+		# 	pygame.draw.rect(win, (255, 255, 255), (tile[0].x - self.scroll[0], tile[0].y - self.scroll[1], tile[0].width, tile[0].height), 1)
 	
 	def camera(self, ball):
 		self.scroll[0] += ( ball.x - self.scroll[0] - self.screen[0]/2 ) / self.scroll_speed
