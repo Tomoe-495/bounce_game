@@ -1,5 +1,5 @@
 import pygame
-from framework import move, scale_image
+from framework import move
 
 class Ball:
 	def __init__(self, pos):
@@ -29,18 +29,23 @@ class Ball:
 
 	def update(self, movement):
 		if self.right:
-			if self.speed < self.max_speed:
-				self.speed += self.ACC
-		else:
-			if self.speed > 0:
-				self.speed -= self.ACC/2
-
-		if self.left:
-			if self.speed > -self.max_speed:
-				self.speed -= self.ACC
-		else:
+			# if self.speed < self.max_speed:
+			# 	self.speed += self.ACC
+			self.speed += self.ACC
+			self.speed = min(self.speed, self.max_speed)
+		elif self.left:
+			# if self.speed > -self.max_speed:
+			self.speed -= self.ACC
+			self.speed = max(self.speed, -self.max_speed)
+		elif not self.left and not self.right:
 			if self.speed < 0:
 				self.speed += self.ACC/2
+				self.speed = min(0, self.speed)
+			elif self.speed > 0:
+				self.speed -= self.ACC/2
+				self.speed = max(0, self.speed)
+
+		# print(self.speed)
 		
 		self.rotate -= self.speed*2
 		movement[0] += self.speed
@@ -74,7 +79,7 @@ class Ball:
 		# 	self.speed = -self.speed/2
 
 		if collisions["top"]:
-			self.vel = 2
+			self.vel = 1
 	
 	def event(self, event):
 		if event.type == pygame.KEYDOWN:

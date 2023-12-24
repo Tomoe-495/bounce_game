@@ -1,36 +1,41 @@
 import pygame
-from framework import move
 import sys
 from tilemap import Tiles
 from player import Ball
+from paralax import Paralax
 
-W, H = 1000, 700
+W, H = 1000, 600
 FPS = 60
 
 pygame.init()
 clock = pygame.time.Clock()
 
-scale = 0.30
+scale = 0.40
 w, h =  W * scale, H * scale
 
 dis = pygame.display.set_mode((W, H), 0, 32)
-win = pygame.Surface((w, h))
 pygame.display.set_caption("ball movements")
 
+def scale_screen(tilemap, up=True):
+	global scale
+	scale = scale + 0.01 if up else scale - 0.01
+	w, h = W*scale, H*scale
+	tilemap.screen = (w, h)
+	return pygame.Surface((w, h))
 
 def main():
 	run = True
 
 	tile = Tiles((w, h))
 	ball = Ball(tile.get_ball_pos())
+	paralax = Paralax((w, h))
 
-	wall = pygame.Rect(w/2, 100, 100, 500)
+	win = pygame.Surface((w, h))
 
 	def draw(win):
 		win.fill((155, 212, 245))
 
-		pygame.draw.rect(win, (144, 200, 244), (wall.x - tile.scroll[0]/20, wall.y - tile.scroll[1]/10, wall.width, wall.height))
-
+		paralax.draw(win, tile.scroll)
 		tile.draw(win, ball)
 
 		surf = pygame.transform.scale(win, (W, H))
@@ -52,6 +57,11 @@ def main():
 			if event.type == pygame.KEYDOWN:
 				if event.key == pygame.K_ESCAPE:
 					run = False
+
+				if event.key == pygame.K_e:
+					win = scale_screen(tile)
+				elif event.key == pygame.K_q:
+					win = scale_screen(tile, up=False)
 							
 			# if event.type == pygame.MOUSEBUTTONDOWN:
 			# 	if event.button == 1:
@@ -60,7 +70,6 @@ def main():
 			# 		ball.rect.y = my
 					
 		movement = [0, 0]
-		move = [0, 0]
 
 		tile.camera(ball.rect)
 

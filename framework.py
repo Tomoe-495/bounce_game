@@ -14,31 +14,33 @@ def scale_image(img, factor):
 def collision_test(rect, tiles):
 	hit_list = []
 	for tile in tiles:
-		if rect.colliderect(tile[0]):
+		if rect.colliderect(tile):
 			hit_list.append(tile)
 	return hit_list
 
 def move(rect, movement, tiles):
-	normal_tiles = [t for t in tiles if t[1] in [1, 4]]
+	normal_tiles = list(map(lambda x: x[0], [t for t in tiles if t[1] in [1, 4]]))
 	ramps = [t for t in tiles if t[1] in [2, 3]]
+
 	collision_types = {"top": False, "bottom": False, "left": False, "right": False}
+
 	rect.x += movement[0]
 	hit_list = collision_test(rect, normal_tiles)
 	for tile in hit_list:
-		if movement[0] > 0 and tile[1] != 4:
-			rect.right = tile[0].left
+		if movement[0] > 0:
+			rect.right = tile.left
 			collision_types["right"] = True
-		if movement[0] < 0 and tile[1] != 4:
-			rect.left = tile[0].right
+		if movement[0] < 0:
+			rect.left = tile.right
 			collision_types["left"] = True
 	rect.y += movement[1]
 	hit_list = collision_test(rect, normal_tiles)
 	for tile in hit_list:
 		if movement[1] > 0:
-			rect.bottom = tile[0].top
+			rect.bottom = tile.top
 			collision_types["bottom"] = True
-		if movement[1] < 0 and tile[1] != 4:
-			rect.top = tile[0].bottom
+		if movement[1] < 0:
+			rect.top = tile.bottom
 			collision_types["top"] = True
 
 	ramp_col = ""
@@ -62,6 +64,8 @@ def move(rect, movement, tiles):
 			if rect.bottom > target_y:
 				rect.bottom = target_y
 
+				# 2 = right
+				# 3 = left
 				if ramp_side == 3:
 					rect.x += slide_speed
 					ramp_col = "left"

@@ -8,6 +8,11 @@ def get_obj(map, obj):
 		if id["__identifier"] == obj:
 			return id
 		
+def map_screen(map, layer, size):
+	map = get_obj(map, layer)
+	screen = (size * map["__cWid"], size * map["__cHei"])
+	return screen
+		
 def get_tile_layer(map, layer, size, sprite):
 	map = get_obj(map, layer)
 	surf = pygame.Surface((size * map["__cWid"], size * map["__cHei"]))
@@ -16,7 +21,7 @@ def get_tile_layer(map, layer, size, sprite):
 	# { "px": [0,0], "src": [64,64], "f": 0, "t": 132, "d": [0] },
 	for tile in map["gridTiles"]:
 		s = sprite.get_sprite(tile["src"], size)
-		surf.blit(pygame.transform.flip(s, tile["f"], 0), (tile["px"][0], tile["px"][1]))
+		surf.blit(pygame.transform.flip(s, tile["f"], 0), tile['px'])
 
 	return surf
 
@@ -32,8 +37,13 @@ class Tiles:
 
 		self.csv_map = get_obj(self.map, "Grid_set")
 		self.size = self.csv_map["__gridSize"]
+		self.map_screen = map_screen(self.map, "Tiles", self.size)
 
 		self.layerTiles = get_tile_layer(self.map, "Tiles", self.size, self.sprite)
+		self.layerAssets = get_tile_layer(self.map, "Assets", self.size, self.sprite)
+		self.layerWater = get_tile_layer(self.map, "Water", self.size, self.sprite)
+		self.layerBackground = get_tile_layer(self.map, "Background", self.size, self.sprite)
+
 
 		x = 0
 		y = 0
@@ -50,14 +60,18 @@ class Tiles:
 	scroll_speed = 10
 
 	def get_ball_pos(self):
-		pos = get_obj(self.map, "Player")["entityInstances"][0]
-		return pos["px"]
+		return get_obj(self.map, "Player")["entityInstances"][0]["px"]
 
 	def draw(self, win, ball):
-		self.scroll[0] = 0 if self.scroll[0] < 0 else self.scroll[0]
-		self.scroll[1] = 0 if self.scroll[1] < 0 else self.scroll[1]
+		# self.scroll[0] = 0 if self.scroll[0] < 0 else self.scroll[0]
+		# self.scroll[1] = 0 if self.scroll[1] < 0 else self.scroll[1]
+
+		win.blit(self.layerBackground, (0 - self.scroll[0], 0 - self.scroll[1]))
 
 		ball.draw(win, self.scroll)
+		
+		win.blit(self.layerWater, (0 - self.scroll[0], 0 - self.scroll[1]))
+		win.blit(self.layerAssets, (0 - self.scroll[0], 0 - self.scroll[1]))
 		win.blit(self.layerTiles, (0 - self.scroll[0], 0 - self.scroll[1]))
 
 		# for tile in self.tiles:
@@ -66,3 +80,6 @@ class Tiles:
 	def camera(self, ball):
 		self.scroll[0] += ( ball.x - self.scroll[0] - self.screen[0]/2 ) / self.scroll_speed
 		self.scroll[1] += ( ball.y - self.scroll[1] - self.screen[1]*0.6 ) / self.scroll_speed
+
+		self.scroll[0] = int(max(0, min(self.scroll[0], self.map_screen[0] - self.screen[0])))
+		self.scroll[1] = int(max(0, min(self.scroll[1], self.map_screen[1] - self.screen[1])))
