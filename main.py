@@ -12,6 +12,7 @@ clock = pygame.time.Clock()
 
 scale = 0.40
 w, h =  W * scale, H * scale
+print(scale)
 
 dis = pygame.display.set_mode((W, H), 0, 32)
 pygame.display.set_caption("ball movements")
@@ -21,6 +22,7 @@ def scale_screen(tilemap, up=True):
 	scale = scale + 0.01 if up else scale - 0.01
 	w, h = W*scale, H*scale
 	tilemap.screen = (w, h)
+	print(scale)
 	return pygame.Surface((w, h))
 
 def main():

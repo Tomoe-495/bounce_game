@@ -8,7 +8,7 @@ class Paralax:
     bg1 = pygame.image.load(os.path.join("map/background/BG_1.png"))
     bg2 = pygame.image.load(os.path.join("map/background/BG_2.png"))
     bg3 = pygame.image.load(os.path.join("map/background/BG_3.png"))
-    bg1_lax = 2
+    bg1_lax = 4
     bg2_lax = 7
     bg3_lax = 12
     x = 0

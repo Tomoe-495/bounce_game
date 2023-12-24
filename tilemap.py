@@ -8,7 +8,7 @@ def get_obj(map, obj):
 		if id["__identifier"] == obj:
 			return id
 		
-def map_screen(map, layer, size):
+def map_screen(map, layer, size) -> tuple:
 	map = get_obj(map, layer)
 	screen = (size * map["__cWid"], size * map["__cHei"])
 	return screen
@@ -63,8 +63,6 @@ class Tiles:
 		return get_obj(self.map, "Player")["entityInstances"][0]["px"]
 
 	def draw(self, win, ball):
-		# self.scroll[0] = 0 if self.scroll[0] < 0 else self.scroll[0]
-		# self.scroll[1] = 0 if self.scroll[1] < 0 else self.scroll[1]
 
 		win.blit(self.layerBackground, (0 - self.scroll[0], 0 - self.scroll[1]))
 
