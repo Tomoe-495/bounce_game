@@ -75,8 +75,8 @@ class Ball:
 			else:
 				self.vel = 0
 
-		# if collisions["left"] or collisions["right"]:
-		# 	self.speed = -self.speed/2
+		if (collisions["left"] or collisions["right"]) and ramp == "":
+			self.speed = -self.speed/2
 
 		if collisions["top"]:
 			self.vel = 1

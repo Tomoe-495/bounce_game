@@ -11,7 +11,7 @@ class Paralax:
     bg1_lax = 4
     bg2_lax = 7
     bg3_lax = 12
-    x = -500
+    x = -600
     y = 0
 
     def draw(self, win, scroll):

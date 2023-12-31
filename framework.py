@@ -49,17 +49,24 @@ def move(rect, movement, tiles):
 		ramp_side = ramp[1]
 		if rect.colliderect(ramp_rect):
 			rel_x = rect.x - ramp_rect.x
-		
+
 			# 2 = right, 3 = left
 			if ramp_side == 2:
-				pos_height = rel_x + rect.width
+				pos_height = rel_x + rect.height
 			elif ramp_side == 3:
-				pos_height = ramp_rect.width - rel_x 
+				pos_height = ramp_rect.height - rel_x 
 
-			pos_height = min(pos_height, ramp_rect.width)
+			pos_height = min(pos_height, ramp_rect.height)
 			pos_height = max(pos_height, 0)
 
-			target_y = ramp_rect.y + ramp_rect.width - pos_height
+			target_y = ramp_rect.y + ramp_rect.height - pos_height
+
+			if rect.top > target_y:
+				collision_types["top"] = True
+				if(rect.left < ramp_rect.right):
+					rect.left = ramp_rect.right
+					collision_types["left"] = True
+				return rect, collision_types, ramp_col
 
 			if rect.bottom > target_y:
 				rect.bottom = target_y
@@ -69,7 +76,7 @@ def move(rect, movement, tiles):
 				if ramp_side == 3:
 					rect.x += slide_speed
 					ramp_col = "left"
-				else:
+				elif ramp_side == 2:
 					rect.x -= slide_speed
 					ramp_col = "right"
 

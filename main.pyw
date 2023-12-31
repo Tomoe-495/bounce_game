@@ -15,7 +15,7 @@ w, h =  W * scale, H * scale
 print(scale)
 
 dis = pygame.display.set_mode((W, H), 0, 32)
-pygame.display.set_caption("ball movements")
+pygame.display.set_caption("Bounce")
 
 def scale_screen(tilemap, up=True):
 	global scale
