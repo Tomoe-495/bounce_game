@@ -3,6 +3,7 @@ import sys
 from tilemap import Tiles
 from player import Ball
 from paralax import Paralax
+from fog import Fog
 
 W, H = 1000, 600
 FPS = 60
@@ -31,6 +32,7 @@ def main():
 	tile = Tiles((w, h))
 	ball = Ball(tile.get_ball_pos())
 	paralax = Paralax((w, h))
+	fog = Fog((w, h))
 
 	win = pygame.Surface((w, h))
 	win.fill((155, 212, 245))

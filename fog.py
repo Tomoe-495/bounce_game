@@ -1,7 +1,7 @@
 from PIL import Image, ImageDraw, ImageFilter
 import random
 
-def generate_foggy_cloud(width=1000, height=600, num_clouds=50, opacity=(10, 180)):
+def get_cloud(width=1000, height=600, num_clouds=50, opacity=(10, 180)):
     # Create a new RGBA image with a transparent background
     image = Image.new("RGBA", (width, height), (0, 0, 0, 0))
     draw = ImageDraw.Draw(image)
@@ -29,10 +29,8 @@ def generate_foggy_cloud(width=1000, height=600, num_clouds=50, opacity=(10, 180
     image = image.filter(ImageFilter.GaussianBlur(radius=30))
 
     # Save the resulting image
-    image.save("cloud_image.png", "PNG")
+    # image.save("cloud_image.png", "PNG")
     return image
-
-
 
 # using pillow generated image in pygme
 
@@ -41,3 +39,7 @@ def generate_foggy_cloud(width=1000, height=600, num_clouds=50, opacity=(10, 180
 # pygame_surface = pygame.image.fromstring(
     # foggy_cloud_image.tobytes(), foggy_cloud_image.size, "RGBA"
 # )
+
+class Fog:
+    def __init__(self, screen):
+        self.screen = screen
