@@ -33,9 +33,9 @@ def main():
 	paralax = Paralax((w, h))
 
 	win = pygame.Surface((w, h))
+	win.fill((155, 212, 245))
 
 	def draw(win):
-		win.fill((155, 212, 245))
 
 		paralax.draw(win, tile.scroll)
 		tile.draw(win, ball)
