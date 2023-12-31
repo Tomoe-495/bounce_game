@@ -10,33 +10,35 @@ class Ball:
 		self.size = 15
 		self.rect = pygame.Rect(self.x, self.y, self.size+1, self.size+1)
 		self.color = "#EF3838"
+
 		self.vel = 0
 		self.acc = 0.3
-		self.jump_limit = 1
-		self.jump_count = 0
-		self.jump_power = -6
+
 		self.right = None
 		self.left = None
 		self.speed = 0
 		self.max_speed = 4
 		self.ACC = 0.2
-		self.rotate = 0
-		
+
+		self.jump_limit = 1
+		self.jump_count = 0
+		self.jump_power = -6
+
+		self.draw_size = self.size * 0.75
 
 	def draw(self, win, scroll):
-		pygame.draw.circle(win, self.color, (self.rect.x + (self.rect.width/2) - scroll[0], self.rect.y + (self.rect.height/2) - scroll[1]), self.size*0.75)
+		pygame.draw.circle(win, self.color, (self.rect.x + (self.rect.width/2) - scroll[0], self.rect.y + (self.rect.height/2) - scroll[1]), self.draw_size)
 		# pygame.draw.rect(win, (255, 255, 255), (self.rect.x  - scroll[0], self.rect.y  - scroll[1], self.rect.width, self.rect.height), 1)
 
 	def update(self, movement):
 		if self.right:
-			# if self.speed < self.max_speed:
-			# 	self.speed += self.ACC
 			self.speed += self.ACC
 			self.speed = min(self.speed, self.max_speed)
+
 		elif self.left:
-			# if self.speed > -self.max_speed:
 			self.speed -= self.ACC
 			self.speed = max(self.speed, -self.max_speed)
+
 		elif not self.left and not self.right:
 			if self.speed < 0:
 				self.speed += self.ACC/2
@@ -45,9 +47,7 @@ class Ball:
 				self.speed -= self.ACC/2
 				self.speed = max(0, self.speed)
 
-		# print(self.speed)
-		
-		self.rotate -= self.speed*2
+		# moving in X velocity
 		movement[0] += self.speed
 
 		#		gravity
@@ -72,14 +72,15 @@ class Ball:
 
 			if self.vel > 2:
 				self.vel = -self.vel/2
-			else:
+			elif self.vel < 2:
 				self.vel = 0
+	
+		elif collisions["top"]:
+			self.vel = 1
 
 		if (collisions["left"] or collisions["right"]) and ramp == "":
 			self.speed = -self.speed/2
 
-		if collisions["top"]:
-			self.vel = 1
 	
 	def event(self, event):
 		if event.type == pygame.KEYDOWN:
