@@ -1,6 +1,7 @@
 import pygame
 from framework import get_map
 from spritesheet import Sprite
+from fog import back_fogs, fore_fogs
 
 def get_obj(map, obj):
 	map = map["levels"][0]["layerInstances"]
@@ -66,11 +67,19 @@ class Tiles:
 
 		win.blit(self.layerBackground, (0 - self.scroll[0], 0 - self.scroll[1]))
 
+		# for fog in back_fogs:
+		# 	fog.draw(win, self.scroll)
+
 		ball.draw(win, self.scroll)
 		
 		win.blit(self.layerWater, (0 - self.scroll[0], 0 - self.scroll[1]))
 		win.blit(self.layerAssets, (0 - self.scroll[0], 0 - self.scroll[1]))
 		win.blit(self.layerTiles, (0 - self.scroll[0], 0 - self.scroll[1]))
+
+		# for fog in fore_fogs:
+		# 	fog.draw(win, self.scroll)
+		
+		# print(len(back_fogs), len(fore_fogs))
 
 		# for tile in self.tiles:
 		# 	pygame.draw.rect(win, (255, 255, 255), (tile[0].x - self.scroll[0], tile[0].y - self.scroll[1], tile[0].width, tile[0].height), 1)

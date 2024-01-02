@@ -3,7 +3,7 @@ import sys
 from tilemap import Tiles
 from player import Ball
 from paralax import Paralax
-from fog import Fog
+from fog import fog_updating
 
 W, H = 1000, 600
 FPS = 60
@@ -15,7 +15,8 @@ scale = 0.40
 w, h =  W * scale, H * scale
 print(scale)
 
-dis = pygame.display.set_mode((W, H), 0, 32)
+flag = pygame.NOFRAME
+dis = pygame.display.set_mode((W, H), flag, 32)
 pygame.display.set_caption("Bounce")
 
 def scale_screen(tilemap, up=True):
@@ -32,7 +33,6 @@ def main():
 	tile = Tiles((w, h))
 	ball = Ball(tile.get_ball_pos())
 	paralax = Paralax((w, h))
-	fog = Fog((w, h))
 
 	win = pygame.Surface((w, h))
 	win.fill((155, 212, 245))
@@ -49,7 +49,7 @@ def main():
 
 	while run:
 		clock.tick(FPS)
-
+	
 		draw(win)
 
 		for event in pygame.event.get():
@@ -79,6 +79,7 @@ def main():
 
 		ball.update(movement)
 		ball.platform(movement, tile.tiles)
+		# fog_updating((w, h))
 
 	pygame.quit()	
 	sys.exit()
