@@ -12,7 +12,7 @@ pygame.init()
 clock = pygame.time.Clock()
 
 scale = 0.40
-w, h =  W * scale, H * scale
+w, h =  int(W * scale), int(H * scale)
 print(scale)
 
 flag = pygame.NOFRAME
@@ -79,7 +79,7 @@ def main():
 
 		ball.update(movement)
 		ball.platform(movement, tile.tiles)
-		# fog_updating((w, h))
+		fog_updating((w, h))
 
 	pygame.quit()	
 	sys.exit()

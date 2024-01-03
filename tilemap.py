@@ -67,8 +67,10 @@ class Tiles:
 
 		win.blit(self.layerBackground, (0 - self.scroll[0], 0 - self.scroll[1]))
 
-		# for fog in back_fogs:
-		# 	fog.draw(win, self.scroll)
+		for fog in back_fogs:
+			fog.draw(win, self.scroll)
+			if fog.x < 0 and fog in back_fogs:
+				back_fogs.pop(back_fogs.index(fog))
 
 		ball.draw(win, self.scroll)
 		
@@ -76,8 +78,10 @@ class Tiles:
 		win.blit(self.layerAssets, (0 - self.scroll[0], 0 - self.scroll[1]))
 		win.blit(self.layerTiles, (0 - self.scroll[0], 0 - self.scroll[1]))
 
-		# for fog in fore_fogs:
-		# 	fog.draw(win, self.scroll)
+		for fog in fore_fogs:
+			fog.draw(win, self.scroll)
+			if fog.x < 0:
+				fore_fogs.pop(fore_fogs.index(fog))
 		
 		# print(len(back_fogs), len(fore_fogs))
 
