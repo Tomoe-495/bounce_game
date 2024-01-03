@@ -84,15 +84,15 @@ class Ball:
 	
 	def event(self, event):
 		if event.type == pygame.KEYDOWN:
-			if event.key == pygame.K_UP:
+			if event.key == pygame.K_w:
 				self.jump()
-			if event.key == pygame.K_RIGHT:
+			if event.key == pygame.K_d:
 				self.right = True
-			if event.key == pygame.K_LEFT:
+			if event.key == pygame.K_a:
 				self.left = True
 
 		if event.type == pygame.KEYUP:
-			if event.key == pygame.K_RIGHT:
+			if event.key == pygame.K_d:
 				self.right = False
-			if event.key == pygame.K_LEFT:
+			if event.key == pygame.K_a:
 				self.left = False

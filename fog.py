@@ -3,16 +3,16 @@ import random
 import pygame
 from framework import scale_image
 
-def get_cloud(width=1000, height=600, num_clouds=30, opacity=(10, 180)):
+def get_cloud(width=1000, height=600, num_clouds=50, opacity=(10, 180)):
     # Create a new RGBA image with a transparent background
 
     image = Image.new("RGBA", (width, height), (255, 255, 255, 0))
     draw = ImageDraw.Draw(image)
 
-    edge = width*0.20
+    edge = 50
     # Generate random foggy clouds
     for _ in range(num_clouds):
-        cloud_radius = random.randint(edge/2, edge)
+        cloud_radius = random.randint(25, 40)
         cloud_x = random.randint(edge, width - edge)
         cloud_y = random.randint(edge, height - edge)
 
@@ -29,7 +29,7 @@ def get_cloud(width=1000, height=600, num_clouds=30, opacity=(10, 180)):
         )
 
     # Apply a blur filter to the image to make it look foggy
-    image = image.filter(ImageFilter.GaussianBlur(radius=20))
+    image = image.filter(ImageFilter.GaussianBlur(radius=7))
 
     # Save the resulting image
     # image.save("cloud_image.png", "PNG")
@@ -46,13 +46,13 @@ def get_cloud(width=1000, height=600, num_clouds=30, opacity=(10, 180)):
 class Fog:
     def __init__(self, screen:tuple, back:bool=True):
         self.screen = screen
-        print(self.screen)
-        self.speed = 1
-        self.opacity = (10, 100) if back else (70, 200)
+
+        self.speed = random.uniform(0.2, 0.5)
+        self.opacity = (10, 120) if back else (100, 240)
 
         self.fog = get_cloud(width=self.screen[0], height=self.screen[1], opacity=self.opacity)
         self.fog = pygame.image.fromstring(self.fog.tobytes(), self.fog.size, "RGBA")
-        self.fog = scale_image(self.fog, 0.4)
+        self.fog = scale_image(self.fog, 0.7)
 
         self.x = random.randint(self.screen[0], self.screen[0] + 300)
         self.y = random.randint(int(-(self.fog.get_height()*0.30)), int(self.screen[1] - self.fog.get_height()*0.10))

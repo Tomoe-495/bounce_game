@@ -69,7 +69,7 @@ class Tiles:
 
 		for fog in back_fogs:
 			fog.draw(win, self.scroll)
-			if fog.x < 0 and fog in back_fogs:
+			if fog.x + fog.fog.get_width() < 0 and fog in back_fogs:
 				back_fogs.pop(back_fogs.index(fog))
 
 		ball.draw(win, self.scroll)
@@ -80,7 +80,7 @@ class Tiles:
 
 		for fog in fore_fogs:
 			fog.draw(win, self.scroll)
-			if fog.x < 0:
+			if fog.x + fog.fog.get_width() < 0:
 				fore_fogs.pop(fore_fogs.index(fog))
 		
 		# print(len(back_fogs), len(fore_fogs))
