@@ -26,6 +26,12 @@ def get_tile_layer(map, layer, size, sprite):
 
 	return surf
 
+def fog_draw(win, scroll, fogs):
+	for fog in fogs:
+		fog.draw(win, scroll)
+		if fog.x + fog.fog.get_width() < 0:
+			fogs.remove(fog)
+
 
 class Tiles:
 	def __init__(self, screen:tuple):
@@ -67,10 +73,8 @@ class Tiles:
 
 		win.blit(self.layerBackground, (0 - self.scroll[0], 0 - self.scroll[1]))
 
-		for fog in back_fogs:
-			fog.draw(win, self.scroll)
-			if fog.x + fog.fog.get_width() < 0 and fog in back_fogs:
-				back_fogs.pop(back_fogs.index(fog))
+		#  background fogs
+		fog_draw(win, self.scroll, back_fogs)
 
 		ball.draw(win, self.scroll)
 		
@@ -78,10 +82,8 @@ class Tiles:
 		win.blit(self.layerAssets, (0 - self.scroll[0], 0 - self.scroll[1]))
 		win.blit(self.layerTiles, (0 - self.scroll[0], 0 - self.scroll[1]))
 
-		for fog in fore_fogs:
-			fog.draw(win, self.scroll)
-			if fog.x + fog.fog.get_width() < 0:
-				fore_fogs.pop(fore_fogs.index(fog))
+		# foreground fog
+		fog_draw(win, self.scroll, fore_fogs)
 		
 		# print(len(back_fogs), len(fore_fogs))
 
@@ -94,3 +96,5 @@ class Tiles:
 
 		self.scroll[0] = int(max(0, min(self.scroll[0], self.map_screen[0] - self.screen[0])))
 		self.scroll[1] = int(max(0, min(self.scroll[1], self.map_screen[1] - self.screen[1])))
+
+		print(self.scroll, len(back_fogs), len(fore_fogs))

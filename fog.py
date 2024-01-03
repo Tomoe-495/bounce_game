@@ -1,7 +1,7 @@
 from PIL import Image, ImageDraw, ImageFilter
 import random
 import pygame
-from framework import scale_image
+# from framework import scale_image
 
 def get_cloud(width=1000, height=600, num_clouds=50, opacity=(10, 180)):
     # Create a new RGBA image with a transparent background
@@ -44,18 +44,19 @@ def get_cloud(width=1000, height=600, num_clouds=50, opacity=(10, 180)):
 # )
 
 class Fog:
-    def __init__(self, screen:tuple, back:bool=True):
+    def __init__(self, screen:tuple, scroll:list, back:bool=True):
         self.screen = screen
+        self.scroll = scroll
 
-        self.speed = random.uniform(0.2, 0.5)
-        self.opacity = (10, 120) if back else (100, 240)
+        self.speed = random.uniform(0.2, 0.3)
+        self.opacity = (10, 80) if back else (60, 100)
 
         self.fog = get_cloud(width=self.screen[0], height=self.screen[1], opacity=self.opacity)
         self.fog = pygame.image.fromstring(self.fog.tobytes(), self.fog.size, "RGBA")
-        self.fog = scale_image(self.fog, 0.7)
+        # self.fog = scale_image(self.fog, 0.7)
 
-        self.x = random.randint(self.screen[0], self.screen[0] + 300)
-        self.y = random.randint(int(-(self.fog.get_height()*0.30)), int(self.screen[1] - self.fog.get_height()*0.10))
+        self.x = random.randint(self.screen[0] + self.scroll[0], self.screen[0] + 300 + self.scroll[0])
+        self.y = random.randint(-int(self.fog.get_height()*0.30), self.screen[1] - int(self.fog.get_height()*0.10))
 
     def draw(self, win, scroll):
         win.blit(self.fog, (self.x - scroll[0], self.y - scroll[1]))
@@ -67,9 +68,10 @@ class Fog:
 back_fogs = []
 fore_fogs = []
 
-def fog_updating(screen):
-    rand = random.randint(1, 1000)
-    if(rand in [233, 577, 888]):
-        back_fogs.append(Fog(screen))
-    elif(rand in [222, 444, 777]):
-        fore_fogs.append(Fog(screen, back=False))
+def fog_updating(screen, scroll):
+    if len(fore_fogs) + len(back_fogs) < 5:
+        rand = random.randint(1, 1000)
+        if rand in [233, 888]:
+            back_fogs.append(Fog(screen, scroll))
+        elif rand in [222, 777]:
+            fore_fogs.append(Fog(screen, scroll, back=False))

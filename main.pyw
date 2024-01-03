@@ -79,7 +79,7 @@ def main():
 
 		ball.update(movement)
 		ball.platform(movement, tile.tiles)
-		fog_updating((w, h))
+		fog_updating((w, h), tile.scroll)
 
 	pygame.quit()	
 	sys.exit()
