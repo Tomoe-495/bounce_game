@@ -55,7 +55,7 @@ class Fog:
         self.fog = pygame.image.fromstring(self.fog.tobytes(), self.fog.size, "RGBA")
         # self.fog = scale_image(self.fog, 0.7)
 
-        self.x = random.randint(self.screen[0] + self.scroll[0], self.screen[0] + 300 + self.scroll[0])
+        self.x = random.randint(self.screen[0] + self.scroll[0], self.screen[0] + 500 + self.scroll[0])
         self.y = random.randint(-int(self.fog.get_height()*0.30), self.screen[1] - int(self.fog.get_height()*0.10))
 
     def draw(self, win, scroll):
@@ -69,7 +69,7 @@ back_fogs = []
 fore_fogs = []
 
 def fog_updating(screen, scroll):
-    if len(fore_fogs) + len(back_fogs) < 5:
+    if len(fore_fogs) + len(back_fogs) < 10:
         rand = random.randint(1, 1000)
         if rand in [233, 888]:
             back_fogs.append(Fog(screen, scroll))

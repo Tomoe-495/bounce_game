@@ -85,8 +85,6 @@ class Tiles:
 		# foreground fog
 		fog_draw(win, self.scroll, fore_fogs)
 		
-		# print(len(back_fogs), len(fore_fogs))
-
 		# for tile in self.tiles:
 		# 	pygame.draw.rect(win, (255, 255, 255), (tile[0].x - self.scroll[0], tile[0].y - self.scroll[1], tile[0].width, tile[0].height), 1)
 	
@@ -97,4 +95,4 @@ class Tiles:
 		self.scroll[0] = int(max(0, min(self.scroll[0], self.map_screen[0] - self.screen[0])))
 		self.scroll[1] = int(max(0, min(self.scroll[1], self.map_screen[1] - self.screen[1])))
 
-		print(self.scroll, len(back_fogs), len(fore_fogs))
+		# print(self.scroll, len(back_fogs), len(fore_fogs))
