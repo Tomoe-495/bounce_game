@@ -1,0 +1,232 @@
+<!doctype html>
+<html>
+<head>
+	<title>Ship</title>
+<style>
+
+body{
+  margin:0;
+  width: 100vw;
+  height: 100vh;
+  cursor: none;
+}
+.ship{
+  width: 10px;
+  height: 10px;
+  background: #454545;
+  position: fixed;
+  border-radius: 3px 3px 0 0;
+  transform: translateX(-50%) translateY(-50%)
+}
+.bullet{
+	position: fixed;
+	width: 5px;
+	height: 5px;
+	background: #454545;
+	border-radius: 50%;
+}
+.asteroid{
+	width: 10px;
+	height: 10px;
+	background: #454545;
+	border-radius: 50%;
+	position: fixed;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class='ship'></div>
+
+<div class="bullets"></div>
+
+
+
+<script>
+
+const asteroids = [];
+const bulletContainer = [];
+const screen = {width: window.innerWidth, height: innerHeight};
+
+class Asteroid{
+	constructor(x, y){
+		this.x = x;
+		this.y = y;
+	}
+
+	rect = document.createElement("span");
+	momentum = {x: getRandDec(-2, 2), y: getRandDec(0.5, 2)};
+	onScreen = false;
+
+	left = (px) => {
+		this.x = px;
+		this.rect.style.left = `${px}px`;
+	}
+	top = (px) => {
+		this.y = px;
+		this.rect.style.top = `${px}px`;
+	}
+	movement = () => {
+
+		this.left(this.x + this.momentum.x);
+		this.top(this.y + this.momentum.y);
+
+		if (this.y > 0) this.onScreen = true;
+		
+		if( this.x < 0 || this.x + this.rect.offsetWidth > screen.width ){
+			this.momentum.x = -this.momentum.x;
+		}
+		if( (this.y + this.rect.offsetHeight > screen.height || this.y < 0) && this.onScreen ){
+			this.momentum.y = -this.momentum.y;
+		}
+	}
+	save = () => {
+		this.rect.classList.add("asteroid");
+		this.rect.style.left = `${this.x}px`;
+		this.rect.style.top = `${this.y}px`;
+		document.body.appendChild(this.rect);
+	}
+	delete = index => {
+		document.querySelectorAll(".asteroid")[index].remove();
+		asteroids.splice(1, index);
+	}
+}
+
+class Bullet{
+	constructor(x, y, ast){
+		this.x = x;
+		this.y = y;
+		this.ast = ast;
+
+		const distance = {x: this.ast.x - this.x, y: this.ast.y - this.y};
+		const frames = Math.max(Math.abs(distance.x), Math.abs(distance.y))/10;
+		
+		this.speed = {x: distance.x/frames, y: distance.y/frames};
+	}
+	rect = document.createElement("span");
+
+	left = (px) => {
+		this.x = px;
+		this.rect.style.left = `${px}px`;
+	}
+	top = (px) => {
+		this.y = px;
+		this.rect.style.top = `${px}px`;
+	}
+	update = () => {
+		this.left(this.x + this.speed.x);
+		this.top(this.y + this.speed.y);
+	}
+	save = () => {
+		this.rect.classList.add("bullet");
+		this.rect.style.left = `${this.x}px`;
+		this.rect.style.top = `${this.y}px`;
+		document.querySelector(".bullets").appendChild(this.rect)
+	}
+	delete = (index) => {
+		const e = document.querySelectorAll(".bullet")[index];
+		e.remove();
+		bulletContainer.splice(1, index);
+	}
+	offScreen = () => {
+		return this.x + this.rect.offsetWidth < 0 || this.x > screen.width || this.y + this.rect.offsetHeight < 0 || this.y > screen.height;
+	}
+}
+
+const ship = document.querySelector(".ship");
+const pointer = {x:0, y:0};
+
+
+setInterval( () => {
+	ship.style.left = `${pointer.x}px`;
+	ship.style.top = `${pointer.y}px`;
+
+	if(getRand(1, 100) === 3){
+//		const asteroid = new Asteroid(getRand(10, screen.width-10), getRand(-500, -50));
+//		asteroid.save();
+//		asteroids.push(asteroid);
+	}
+
+	for(let ast of asteroids){
+		ast.movement();
+	}
+
+	if(asteroids.length > 0){
+		const shipPos = getPos(ship);
+		const point = getPos(asteroids[0].rect);
+
+		const angle = getAngle(point, shipPos);
+		ship.style.transform = `rotate(${angle}deg)`;
+	}
+
+	for(let bullet of bulletContainer){
+		bullet.update();
+		if(asteroids.length > 0){
+			if(checkCol(asteroids[0].rect, bullet.rect)){
+				bullet.delete(0);
+				asteroids[0].delete(0);
+			}
+		}else if(bullet.offScreen()){
+			bullet.delete(0);
+		}
+	}
+
+}, 1000/60);
+
+window.addEventListener("mousemove", event => {
+	pointer.x = event.clientX;
+	pointer.y = event.clientY;
+});
+
+window.addEventListener("keypress", event => {
+	if(event.key == "z"){
+		const ast = asteroids.length ? getPos(asteroids[0].rect) : {x:pointer.x, y:0};
+		const bullet = new Bullet(pointer.x, pointer.y, ast);
+		bullet.save();
+		bulletContainer.push(bullet);
+	};
+});
+
+function checkCol(ele1, ele2){
+	const rect1 = ele1.getBoundingClientRect();
+	const rect2 = ele2.getBoundingClientRect();
+
+	return !(rect1.right < rect2.left || rect1.left > rect2.right || rect1.bottom < rect2.top || rect1.top > rect2.bottom);
+}
+
+function getRand(min, max) {
+	return  Math.floor(Math.random() * (max - min + 1) ) + min;
+}
+
+function getRandDec(min, max) {
+	return  Math.random() * (max - min + 1) + min;
+}
+
+function getAngle(e1, e2) {
+	const angle = Math.atan2(e2.y - e1.y, e2.x, e1.x);
+	return angle * (180/Math.PI) + 90;
+}
+
+
+function getPos(block){
+	let x = block.style.left;
+	let y = block.style.top;
+	x = parseInt(x.split("px")[0]);
+	y = parseInt(y.split("px")[0]);
+	return {x:x, y:y};
+}
+
+
+window.addEventListener("resize", () => {
+	screen.width = window.innerWidth;
+	screen.height = window.innerHeight;
+})
+
+
+</script>
+
+<body>
+</html>
