@@ -4,6 +4,7 @@ from tilemap import Tiles
 from player import Ball
 from paralax import Paralax
 from fog import fog_updating
+from wind import Wind
 
 W, H = 1000, 600
 FPS = 60
@@ -30,9 +31,12 @@ def scale_screen(tilemap, up=True):
 def main():
 	run = True
 
-	tile = Tiles((w, h))
+	wind = Wind()
+
+	tile = Tiles((w, h), wind)
 	ball = Ball(tile.get_ball_pos())
 	paralax = Paralax((w, h))
+
 
 	win = pygame.Surface((w, h))
 	win.fill((155, 212, 245))
@@ -49,8 +53,9 @@ def main():
 
 	while run:
 		clock.tick(FPS)
-	
+
 		draw(win)
+
 
 		for event in pygame.event.get():
 			if event.type == pygame.QUIT:
@@ -80,6 +85,8 @@ def main():
 		ball.update(movement)
 		ball.platform(movement, tile.tiles)
 		fog_updating((w, h), tile.scroll)
+
+		wind.update()
 
 	pygame.quit()	
 	sys.exit()

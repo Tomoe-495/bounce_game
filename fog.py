@@ -58,12 +58,13 @@ class Fog:
         self.x = random.randint(self.screen[0] + self.scroll[0], self.screen[0] + 500 + self.scroll[0])
         self.y = random.randint(-int(self.fog.get_height()*0.30), self.screen[1] - int(self.fog.get_height()*0.10))
 
-    def draw(self, win, scroll):
+    def draw(self, win, scroll, wind_pressure):
         win.blit(self.fog, (self.x - scroll[0], self.y - scroll[1]))
 
     # def update(self):
-        self.x -= self.speed
-
+        # self.x -= self.speed
+        self.x -= wind_pressure*0.7
+        
 
 back_fogs = []
 fore_fogs = []

@@ -26,18 +26,20 @@ def get_tile_layer(map, layer, size, sprite):
 
 	return surf
 
-def fog_draw(win, scroll, fogs):
+def fog_draw(win, scroll, fogs, wind_pressure):
 	for fog in fogs:
-		fog.draw(win, scroll)
+		fog.draw(win, scroll, wind_pressure)
 		if fog.x + fog.fog.get_width() < 0:
 			fogs.remove(fog)
 
 
 class Tiles:
-	def __init__(self, screen:tuple):
+	def __init__(self, screen:tuple, wind):
 		self.tiles = []
 		self.scroll = [0, 0]
 		self.screen = screen
+
+		self.wind = wind
 		
 		self.map = get_map("map/swamp.ldtk")
 		self.sprite = Sprite("map/Terrain_and_Props.png")
@@ -74,7 +76,7 @@ class Tiles:
 		win.blit(self.layerBackground, (0 - self.scroll[0], 0 - self.scroll[1]))
 
 		#  background fogs
-		fog_draw(win, self.scroll, back_fogs)
+		fog_draw(win, self.scroll, back_fogs, self.wind.pressure)
 
 		ball.draw(win, self.scroll)
 		
@@ -83,7 +85,7 @@ class Tiles:
 		win.blit(self.layerTiles, (0 - self.scroll[0], 0 - self.scroll[1]))
 
 		# foreground fog
-		fog_draw(win, self.scroll, fore_fogs)
+		fog_draw(win, self.scroll, fore_fogs, self.wind.pressure)
 		
 		# for tile in self.tiles:
 		# 	pygame.draw.rect(win, (255, 255, 255), (tile[0].x - self.scroll[0], tile[0].y - self.scroll[1], tile[0].width, tile[0].height), 1)
@@ -92,7 +94,7 @@ class Tiles:
 		self.scroll[0] += ( ball.x - self.scroll[0] - self.screen[0]/2 ) / self.scroll_speed
 		self.scroll[1] += ( ball.y - self.scroll[1] - self.screen[1]*0.6 ) / self.scroll_speed
 
-		self.scroll[0] = int(max(0, min(self.scroll[0], self.map_screen[0] - self.screen[0])))
-		self.scroll[1] = int(max(0, min(self.scroll[1], self.map_screen[1] - self.screen[1])))
+		self.scroll[0] = int(max(0, min(self.scroll[0], self.map_screen[0] - self.screen[0])));
+		self.scroll[1] = int(max(0, min(self.scroll[1], self.map_screen[1] - self.screen[1])));
 
 		# print(self.scroll, len(back_fogs), len(fore_fogs))
