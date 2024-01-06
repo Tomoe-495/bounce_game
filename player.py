@@ -32,25 +32,21 @@ class Ball:
 
 	def update(self, movement):
 		if self.right:
-			self.speed += self.ACC
-			self.speed = min(self.speed, self.max_speed)
+			self.speed = min(self.max_speed, self.speed + self.ACC)
 
 		elif self.left:
-			self.speed -= self.ACC
-			self.speed = max(self.speed, -self.max_speed)
+			self.speed = max(-self.max_speed, self.speed - self.ACC)
 
 		elif not self.left and not self.right:
 			if self.speed < 0:
-				self.speed += self.ACC/2
-				self.speed = min(0, self.speed)
+				self.speed = min(0, self.speed + (self.ACC/2))
 			elif self.speed > 0:
-				self.speed -= self.ACC/2
-				self.speed = max(0, self.speed)
+				self.speed = max(0, self.speed - (self.ACC/2))
 
 		# moving in X velocity
 		movement[0] += self.speed
 
-		#		gravity
+		#		gravity - Y velocity
 		self.vel += self.acc
 		movement[1] += self.vel
 

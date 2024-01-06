@@ -49,7 +49,7 @@ class Fog:
         self.scroll = scroll
 
         self.speed = random.uniform(0.2, 0.3)
-        self.opacity = (10, 80) if back else (60, 100)
+        self.opacity = (30, 80) if back else (60, 100)
 
         self.fog = get_cloud(width=self.screen[0], height=self.screen[1], opacity=self.opacity)
         self.fog = pygame.image.fromstring(self.fog.tobytes(), self.fog.size, "RGBA")
@@ -82,10 +82,17 @@ def fog_updating(screen, scroll):
     global count
     count += 1
     if count >= 60:
-        if random.random() < 0.3:
-            rand = random.randint(0, 1)
-            if rand:
+        if random.random() < 0.2:
+            rand = random.random()
+            if rand < 0.5:
                 back_fogs.append(Fog(screen, scroll))
-            else:
+            elif rand > 0.5:
                 fore_fogs.append(Fog(screen, scroll, back=False))
         count = 0
+
+for i in range(0, 3):
+    rand = random.random()
+    if rand < 0.5:
+        back_fogs.append(Fog((400, 240), [0, 0]))
+    elif rand > 0.5:
+        fore_fogs.append(Fog((400, 240), [0, 0], back=False))
