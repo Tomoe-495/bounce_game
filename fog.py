@@ -64,15 +64,28 @@ class Fog:
     # def update(self):
         # self.x -= self.speed
         self.x -= wind_pressure*0.7
-        
+
 
 back_fogs = []
 fore_fogs = []
 
+count = 0
+
 def fog_updating(screen, scroll):
-    if len(fore_fogs) + len(back_fogs) < 10:
-        rand = random.randint(1, 1000)
-        if rand in [233, 888]:
-            back_fogs.append(Fog(screen, scroll))
-        elif rand in [222, 777]:
-            fore_fogs.append(Fog(screen, scroll, back=False))
+    # if len(fore_fogs) + len(back_fogs) < 10:
+        # rand = random.randint(1, 1000)
+        # if rand in [233, 888]:
+        #     back_fogs.append(Fog(screen, scroll))
+        # elif rand in [222, 777]:
+        #     fore_fogs.append(Fog(screen, scroll, back=False))
+    
+    global count
+    count += 1
+    if count >= 60:
+        if random.random() < 0.3:
+            rand = random.randint(0, 1)
+            if rand:
+                back_fogs.append(Fog(screen, scroll))
+            else:
+                fore_fogs.append(Fog(screen, scroll, back=False))
+        count = 0
