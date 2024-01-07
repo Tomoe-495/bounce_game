@@ -2,16 +2,19 @@ import pygame
 import os
 from framework import scale_image
 
+def load_image(filename, size=1):
+    img = pygame.image.load(os.path.join(filename))
+    return scale_image(img, size)
 class Paralax:
     def __init__(self, screen):
         self.screen = screen
-    bg1 = pygame.image.load(os.path.join("map/background/BG_1.png"))
-    bg2 = pygame.image.load(os.path.join("map/background/BG_2.png"))
-    bg3 = pygame.image.load(os.path.join("map/background/BG_3.png"))
+    bg1 = load_image("map/background/BG_1.png")
+    bg2 = load_image("map/background/BG_2.png")
+    bg3 = load_image("map/background/BG_3.png")
     bg1_lax = 4
     bg2_lax = 7
     bg3_lax = 12
-    x = -600
+    x = -800
     y = 0
 
     def draw(self, win, scroll):

@@ -1,6 +1,17 @@
 import json
 import pygame
 import pygame
+import configparser
+
+config = configparser.ConfigParser();
+config.read("config.ini")
+
+def get_config(attri, sect="General"):
+	val = config.get(sect, attri)
+	try:
+		return int(val)
+	except ValueError as e:
+		return val
 
 slide_speed = 1
 

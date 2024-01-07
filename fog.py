@@ -1,7 +1,7 @@
 from PIL import Image, ImageDraw, ImageFilter
 import random
 import pygame
-# from framework import scale_image
+from framework import get_config
 
 def get_cloud(width=1000, height=600, num_clouds=50, opacity=(10, 180)):
     # Create a new RGBA image with a transparent background
@@ -78,21 +78,23 @@ def fog_updating(screen, scroll):
         #     back_fogs.append(Fog(screen, scroll))
         # elif rand in [222, 777]:
         #     fore_fogs.append(Fog(screen, scroll, back=False))
-    
-    global count
-    count += 1
-    if count >= 60:
-        if random.random() < 0.2:
-            rand = random.random()
-            if rand < 0.5:
-                back_fogs.append(Fog(screen, scroll))
-            elif rand > 0.5:
-                fore_fogs.append(Fog(screen, scroll, back=False))
-        count = 0
 
-for i in range(0, 3):
-    rand = random.random()
-    if rand < 0.5:
-        back_fogs.append(Fog((400, 240), [0, 0]))
-    elif rand > 0.5:
-        fore_fogs.append(Fog((400, 240), [0, 0], back=False))
+    if get_config("fog"):
+        global count
+        count += 1
+        if count >= 60:
+            if random.random() < 0.2:
+                rand = random.random()
+                if rand < 0.5:
+                    back_fogs.append(Fog(screen, scroll))
+                elif rand > 0.5:
+                    fore_fogs.append(Fog(screen, scroll, back=False))
+            count = 0
+
+if get_config("fog"):
+    for i in range(0, 3):
+        rand = random.random()
+        if rand < 0.5:
+            back_fogs.append(Fog((400, 240), [0, 0]))
+        elif rand > 0.5:
+            fore_fogs.append(Fog((400, 240), [0, 0], back=False))
