@@ -40,6 +40,7 @@ class Leaf:
 
         self.acc = [0.1, 0.01]
         self.slow = False
+        self.count = 0
 
     
     def draw(self, win, scroll):
@@ -53,12 +54,12 @@ class Leaf:
         else:
             self.angle = max(-45, self.angle - 0.5)
 
-
-        if count.count%120 == 0:
+        if self.count >= 120:
             rand = random.randint(0, 1)
             if rand != self.side:
                 self.side = rand
                 self.slow = True
+            self.count = 0
 
         self.velocity[0] = self.wind.pressure if self.side else -self.wind.pressure/2
 
@@ -74,7 +75,7 @@ class Leaf:
             if self.speed[1] == 0.2:
                 self.slow = False
 
-        
+        self.count += 1
 
 def updating_leaves(map_size, wind):
     if get_config("leaf"):
