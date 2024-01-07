@@ -2,6 +2,7 @@ import json
 import pygame
 import pygame
 import configparser
+import os
 
 config = configparser.ConfigParser();
 config.read("config.ini")
@@ -15,13 +16,15 @@ def get_config(attri, sect="General"):
 
 slide_speed = 1
 
-def fill(surface, color):
-    w, h = surface.get_size()
-    r, g, b, _ = color
-    for x in range(w):
-        for y in range(h):
-            a = surface.get_at((x, y))[3]
-            surface.set_at((x, y), pygame.Color(r, g, b, a))
+def color_change(surface, color):
+	w, h = surface.get_size()
+	r, g, b, _ = color
+	surface = surface.copy()
+	for x in range(w):
+		for y in range(h):
+			a = surface.get_at((x, y))[3]
+			surface.set_at((x, y), pygame.Color(r, g, b, a))
+	return surface
 
 def get_map(filename):
 	with open(filename, 'r') as f:
@@ -30,6 +33,10 @@ def get_map(filename):
 def scale_image(img, factor):
     size = round(img.get_width() * factor), round(img.get_height() * factor)
     return pygame.transform.scale(img, size)
+
+def load_image(filename, size=1):
+    img = pygame.image.load(os.path.join(filename))
+    return scale_image(img, size)
 
 def collision_test(rect, tiles):
 	hit_list = []

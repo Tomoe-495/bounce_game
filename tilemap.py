@@ -2,9 +2,11 @@ import pygame
 from framework import get_map
 from spritesheet import Sprite
 from fog import back_fogs, fore_fogs
+from leaf import leaves, updating_leaves
+from wind import Wind
 
-def get_obj(map, obj):
-	map = map["levels"][0]["layerInstances"]
+def get_obj(map, obj, lvl=0):
+	map = map["levels"][lvl]["layerInstances"]
 	for id in map:
 		if id["__identifier"] == obj:
 			return id
@@ -32,41 +34,51 @@ def fog_draw(win, scroll, fogs, wind_pressure):
 		if fog.x + fog.fog.get_width() < 0:
 			fogs.remove(fog)
 
+def leaf_draw(win, scroll):
+	for leaf in leaves:
+		leaf.draw(win, scroll)
+
+		if leaf.y > leaf.map_size[1] or leaf.x + leaf.img.get_width() < 0:
+			leaves.remove(leaf)
+
 
 class Tiles:
-	def __init__(self, screen:tuple, wind):
-		self.tiles = []
-		self.scroll = [0, 0]
-		self.screen = screen
-
-		self.wind = wind
-		
+	def __init__(self, screen:tuple):
 		self.map = get_map("map/swamp.ldtk")
 		self.sprite = Sprite("map/Terrain_and_Props.png")
-
+		
+		self.scroll = [0, 0]
+		self.screen = screen
+		
 		self.csv_map = get_obj(self.map, "Grid_set")
 		self.size = self.csv_map["__gridSize"]
 		self.map_screen = map_screen(self.map, "Tiles", self.size)
+
+		self.tiles = self.get_tiles()
 
 		self.layerTiles = get_tile_layer(self.map, "Tiles", self.size, self.sprite)
 		self.layerAssets = get_tile_layer(self.map, "Assets", self.size, self.sprite)
 		self.layerWater = get_tile_layer(self.map, "Water", self.size, self.sprite)
 		self.layerBackground = get_tile_layer(self.map, "Background", self.size, self.sprite)
 
+		self.wind = Wind()		
 
+	scroll_speed = 10
+
+	def get_tiles(self):
+		tiles = []
 		x = 0
 		y = 0
 		for block in self.csv_map["intGridCsv"]:
 			if block != 0:
-				self.tiles.append([pygame.Rect(x, y, self.size, self.size), block])
+				tiles.append([pygame.Rect(x, y, self.size, self.size), block])
 	
 			x += self.size
 
 			if x == self.csv_map["__cWid"] * self.size:
 				y += self.size
 				x = 0
-
-	scroll_speed = 10
+		return tiles
 
 	def get_ball_pos(self):
 		return get_obj(self.map, "Player")["entityInstances"][0]["px"]
@@ -82,7 +94,10 @@ class Tiles:
 		
 		win.blit(self.layerWater, (0 - self.scroll[0], 0 - self.scroll[1]))
 		win.blit(self.layerAssets, (0 - self.scroll[0], 0 - self.scroll[1]))
+		leaf_draw(win, self.scroll)
 		win.blit(self.layerTiles, (0 - self.scroll[0], 0 - self.scroll[1]))
+
+		#	drawing leaves
 
 		# foreground fog
 		fog_draw(win, self.scroll, fore_fogs, self.wind.pressure)
@@ -98,3 +113,7 @@ class Tiles:
 		self.scroll[1] = int(max(0, min(self.scroll[1], self.map_screen[1] - self.screen[1])));
 
 		# print(self.scroll, len(back_fogs), len(fore_fogs))
+
+	def update(self):
+		self.wind.update()
+		updating_leaves(self.map_screen, self.wind)

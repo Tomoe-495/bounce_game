@@ -2,6 +2,7 @@ from PIL import Image, ImageDraw, ImageFilter
 import random
 import pygame
 from framework import get_config
+from counter import count
 
 def get_cloud(width=1000, height=600, num_clouds=50, opacity=(10, 180)):
     # Create a new RGBA image with a transparent background
@@ -31,17 +32,15 @@ def get_cloud(width=1000, height=600, num_clouds=50, opacity=(10, 180)):
     # Apply a blur filter to the image to make it look foggy
     image = image.filter(ImageFilter.GaussianBlur(radius=7))
 
-    # Save the resulting image
-    # image.save("cloud_image.png", "PNG")
     return image
 
-# using pillow generated image in pygme
+'''     ----    using pillow generated image in pygme
+foggy_cloud_image = generate_foggy_cloud(width, height, num_clouds)
 
-# foggy_cloud_image = generate_foggy_cloud(width, height, num_clouds)
-
-# pygame_surface = pygame.image.fromstring(
+pygame_surface = pygame.image.fromstring(
     # foggy_cloud_image.tobytes(), foggy_cloud_image.size, "RGBA"
-# )
+)
+'''
 
 class Fog:
     def __init__(self, screen:tuple, scroll:list, back:bool=True):
@@ -61,35 +60,23 @@ class Fog:
     def draw(self, win, scroll, wind_pressure):
         win.blit(self.fog, (self.x - scroll[0], self.y - scroll[1]))
 
-    # def update(self):
-        # self.x -= self.speed
         self.x -= wind_pressure*0.7
 
 
 back_fogs = []
 fore_fogs = []
 
-count = 0
 
 def fog_updating(screen, scroll):
-    # if len(fore_fogs) + len(back_fogs) < 10:
-        # rand = random.randint(1, 1000)
-        # if rand in [233, 888]:
-        #     back_fogs.append(Fog(screen, scroll))
-        # elif rand in [222, 777]:
-        #     fore_fogs.append(Fog(screen, scroll, back=False))
 
     if get_config("fog"):
-        global count
-        count += 1
-        if count >= 60:
+        if count.count%60 == 0:
             if random.random() < 0.2:
                 rand = random.random()
                 if rand < 0.5:
                     back_fogs.append(Fog(screen, scroll))
                 elif rand > 0.5:
                     fore_fogs.append(Fog(screen, scroll, back=False))
-            count = 0
 
 if get_config("fog"):
     for i in range(0, 3):
