@@ -85,19 +85,20 @@ class Tiles:
 
 	def draw(self, win, ball):
 
-		win.blit(self.layerBackground, (0 - self.scroll[0], 0 - self.scroll[1]))
-
 		#  background fogs
 		fog_draw(win, self.scroll, back_fogs, self.wind.pressure)
+
+		win.blit(self.layerBackground, (0 - self.scroll[0], 0 - self.scroll[1]))
 
 		ball.draw(win, self.scroll)
 		
 		win.blit(self.layerWater, (0 - self.scroll[0], 0 - self.scroll[1]))
 		win.blit(self.layerAssets, (0 - self.scroll[0], 0 - self.scroll[1]))
-		leaf_draw(win, self.scroll)
-		win.blit(self.layerTiles, (0 - self.scroll[0], 0 - self.scroll[1]))
 
 		#	drawing leaves
+		leaf_draw(win, self.scroll)
+
+		win.blit(self.layerTiles, (0 - self.scroll[0], 0 - self.scroll[1]))
 
 		# foreground fog
 		fog_draw(win, self.scroll, fore_fogs, self.wind.pressure)
