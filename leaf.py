@@ -30,7 +30,7 @@ class Leaf:
 
         self.velocity = [
             self.wind.pressure if self.side else -self.wind.pressure/2,
-            0.8
+            0.6
         ]
 
         self.speed = [
@@ -61,7 +61,7 @@ class Leaf:
                 self.slow = True
             self.count = 0
 
-        self.velocity[0] = self.wind.pressure if self.side else -self.wind.pressure/2
+        self.velocity[0] = self.wind.pressure if self.side else -self.wind.pressure*0.35
 
         if self.speed[0] < self.velocity[0]:
             self.speed[0] = min(self.velocity[0], self.speed[0] + self.acc[0])
