@@ -5,7 +5,7 @@ class Counter:
 
     def counting(self):
         self.count += 1
-        if self.count > 120:
+        if self.count > 600:
             self.count = 0
 
 

@@ -4,7 +4,7 @@ import pygame
 from framework import get_config
 from counter import count
 
-def get_cloud(width=1000, height=600, num_clouds=50, opacity=60):
+def get_cloud(width=1000, height=600, num_clouds=random.randint(30, 40), opacity=(40, 100)):
     # Create a new RGBA image with a transparent background
 
     image = Image.new("RGBA", (width, height), (255, 255, 255, 0))
@@ -18,7 +18,7 @@ def get_cloud(width=1000, height=600, num_clouds=50, opacity=60):
         cloud_y = random.randint(edge, height - edge)
 
         # Draw the cloud on the image with a random opacity
-        cloud_color = (255, 255, 255, opacity)
+        cloud_color = (255, 255, 255, random.randint(opacity[0], opacity[1]))
         draw.ellipse(
             (
                 cloud_x - cloud_radius,
@@ -47,8 +47,7 @@ class Fog:
         self.screen = screen
         self.scroll = scroll
 
-        self.speed = random.uniform(0.2, 0.3)
-        self.opacity = random.randint(60, 120) if back else random.randint(60, 100)
+        self.opacity = (60, 120) if back else (60, 80)
 
         self.fog = get_cloud(width=self.screen[0], height=self.screen[1], opacity=self.opacity)
         self.fog = pygame.image.fromstring(self.fog.tobytes(), self.fog.size, "RGBA")
@@ -69,8 +68,8 @@ fore_fogs = []
 def fog_updating(screen, scroll):
 
     if get_config("fog"):
-        if count.count%60 == 0:
-            if random.random() < 0.2:
+        if count.count%180 == 0:
+            if random.random() < 0.1:
                 rand = random.random()
                 if rand > 0.5:
                     back_fogs.append(Fog(screen, scroll))
