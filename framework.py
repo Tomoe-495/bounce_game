@@ -14,8 +14,6 @@ def get_config(attri, sect="General"):
 	except ValueError as e:
 		return val
 
-slide_speed = 1
-
 def color_change(surface, color):
 	w, h = surface.get_size()
 	r, g, b, _ = color
@@ -45,8 +43,8 @@ def collision_test(rect, tiles):
 			hit_list.append(tile)
 	return hit_list
 
-def move(rect, movement, tiles):
-	normal_tiles = list(map(lambda x: x[0], [t for t in tiles if t[1] in [1, 4]]))
+def move(rect, movement, tiles, slide_speed=1):
+	normal_tiles = list(map(lambda x: x[0], [t for t in tiles if t[1] == 1]))
 	ramps = [t for t in tiles if t[1] in [2, 3]]
 
 	collision_types = {"top": False, "bottom": False, "left": False, "right": False}

@@ -113,8 +113,6 @@ class Tiles:
 		self.scroll[0] = int(max(0, min(self.scroll[0], self.map_screen[0] - self.screen[0])));
 		self.scroll[1] = int(max(0, min(self.scroll[1], self.map_screen[1] - self.screen[1])));
 
-		# print(self.scroll, len(back_fogs), len(fore_fogs))
-
 	def update(self):
 		self.wind.update()
 		updating_leaves(self.map_screen, self.wind)

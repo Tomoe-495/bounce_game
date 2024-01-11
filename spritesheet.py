@@ -1,11 +1,10 @@
 import pygame
-import os
+from framework import load_image
 
 class Sprite:
     def __init__(self, filename):
-        self.filename = filename
-        self.sheet = pygame.image.load(os.path.join(filename))
-    
+        self.sheet = load_image(filename)
+
     def get_sprite(self, pos, size):
         sprite = pygame.Surface((size, size))
         sprite.set_colorkey((0, 0, 0))

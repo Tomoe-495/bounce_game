@@ -24,6 +24,8 @@ class Leaf:
         self.img = img
 
         self.side = random.randint(0, 1)
+        # True = Left
+        # False = Right
 
         self.wind = wind
         self.angle = 45 if self.side else -45
@@ -55,10 +57,13 @@ class Leaf:
             self.angle = max(-45, self.angle - 0.5)
 
         if self.count >= 120:
-            rand = random.randint(0, 1)
-            if rand != self.side:
-                self.side = rand
-                self.slow = True
+            if self.wind.pressure > 0.8:
+                self.side = True
+            elif self.wind.pressure < 0.8:
+                rand = random.randint(0, 1)
+                if rand != self.side:
+                    self.side = rand
+                    self.slow = True
             self.count = 0
 
         self.velocity[0] = self.wind.pressure if self.side else -self.wind.pressure*0.35

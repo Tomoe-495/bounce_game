@@ -68,7 +68,7 @@ fore_fogs = []
 def fog_updating(screen, scroll):
 
     if get_config("fog"):
-        if count.count%180 == 0:
+        if count.count%120 == 0:
             if random.random() < 0.1:
                 rand = random.random()
                 if rand > 0.5:

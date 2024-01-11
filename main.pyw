@@ -20,9 +20,9 @@ flag = pygame.NOFRAME
 dis = pygame.display.set_mode((W, H), flag, 32)
 pygame.display.set_caption("Bounce")
 
-def scale_screen(tilemap, up=True):
+def scale_screen(tilemap, up=True, size=0.01):
 	global scale
-	scale = scale + 0.01 if up else scale - 0.01
+	scale = scale + size if up else scale - size
 	w, h = W*scale, H*scale
 	tilemap.screen = (w, h)
 	print(scale)
@@ -87,7 +87,7 @@ def main():
 
 		count.counting()
 
-	pygame.quit()	
+	pygame.quit()
 	sys.exit()
 
 
