@@ -34,6 +34,8 @@ def scale_image(img, factor):
 
 def load_image(filename, size=1):
     img = pygame.image.load(os.path.join(filename))
+    if size == 1:
+        return img
     return scale_image(img, size)
 
 def collision_test(rect, tiles):
