@@ -4,6 +4,7 @@ from spritesheet import Sprite
 from fog import back_fogs, fore_fogs
 from leaf import leaves, updating_leaves
 from wind import Wind
+from water import Water
 
 def get_obj(map, obj, lvl=0):
 	map = map["levels"][lvl]["layerInstances"]
@@ -61,7 +62,8 @@ class Tiles:
 		self.layerWater = get_tile_layer(self.map, "Water", self.size, self.sprite)
 		self.layerBackground = get_tile_layer(self.map, "Background", self.size, self.sprite)
 
-		self.wind = Wind()		
+		self.wind = Wind()
+		self.water = Water(self.get_entity("Water"))
 
 	scroll_speed = 10
 
@@ -81,7 +83,13 @@ class Tiles:
 		return tiles
 
 	def get_ball_pos(self):
-		return get_obj(self.map, "Player")["entityInstances"][0]["px"]
+		for obj in get_obj(self.map, "Entities")["entityInstances"]:
+			if obj["__identifier"] == "Player_pos":
+				return obj["px"]
+	
+	def get_entity(self, ent):
+		objs = [i for i in get_obj(self.map, "Entities")["entityInstances"] if i["__identifier"] == ent]
+		return objs
 
 	def draw(self, win, ball):
 
@@ -91,7 +99,8 @@ class Tiles:
 		win.blit(self.layerBackground, (0 - self.scroll[0], 0 - self.scroll[1]))
 
 		ball.draw(win, self.scroll)
-		
+
+		self.water.draw(win, self.scroll)
 		win.blit(self.layerWater, (0 - self.scroll[0], 0 - self.scroll[1]))
 		win.blit(self.layerAssets, (0 - self.scroll[0], 0 - self.scroll[1]))
 
@@ -113,6 +122,7 @@ class Tiles:
 		self.scroll[0] = int(max(0, min(self.scroll[0], self.map_screen[0] - self.screen[0])));
 		self.scroll[1] = int(max(0, min(self.scroll[1], self.map_screen[1] - self.screen[1])));
 
-	def update(self):
+	def update(self, ball):
 		self.wind.update()
+		self.water.update(ball)
 		updating_leaves(self.map_screen, self.wind)

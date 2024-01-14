@@ -17,7 +17,7 @@ w, h =  int(W * scale), int(H * scale)
 print(scale)
 
 flag = pygame.NOFRAME
-dis = pygame.display.set_mode((W, H), flag, 32)
+dis = pygame.display.set_mode((W, H), 0, 32)
 pygame.display.set_caption("Bounce")
 
 def scale_screen(tilemap, up=True, size=0.01):
@@ -35,7 +35,6 @@ def main():
 	ball = Ball(tile.get_ball_pos())
 	paralax = Paralax((w, h))
 
-
 	win = pygame.Surface((w, h))
 	win.fill((155, 212, 245))
 
@@ -43,7 +42,7 @@ def main():
 
 		paralax.draw(win, tile.scroll)
 		tile.draw(win, ball)
-
+		
 		surf = pygame.transform.scale(win, (W, H))
 		dis.blit(surf, (0, 0))
 
@@ -83,7 +82,7 @@ def main():
 		ball.platform(movement, tile.tiles)
 		fog_updating((w, h), tile.scroll)
 
-		tile.update()
+		tile.update(ball)
 
 		count.counting()
 
