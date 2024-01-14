@@ -7,12 +7,20 @@ import os
 config = configparser.ConfigParser();
 config.read("config.ini")
 
-def get_config(attri, sect="General"):
+def get_config(attri:str, sect="General") -> str|int:
 	val = config.get(sect, attri)
 	try:
 		return int(val)
 	except ValueError as e:
 		return val
+	
+def add_on(attri:str, sect:str="General"):
+    def decorator(func):
+        def wrapper(*args, **kwargs):
+            if get_config(attri):
+                return func(*args, **kwargs)
+        return wrapper
+    return decorator
 
 def color_change(surface, color):
 	w, h = surface.get_size()

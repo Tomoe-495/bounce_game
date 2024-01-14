@@ -1,4 +1,4 @@
-from framework import color_change, load_image, get_config
+from framework import color_change, load_image, add_on
 import pygame
 import random
 from counter import count
@@ -82,7 +82,7 @@ class Leaf:
 
         self.count += 1
 
+@add_on("leaf")
 def updating_leaves(map_size, wind):
-    if get_config("leaf"):
-        if count.count%10 == 0 and random.random() < 0.8:
-            leaves.append(Leaf(map_size, random.choice(colors), wind))
+    if count.count%10 == 0 and random.random() < 0.8:
+        leaves.append(Leaf(map_size, random.choice(colors), wind))

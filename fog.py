@@ -1,7 +1,7 @@
 from PIL import Image, ImageDraw, ImageFilter
 import random
 import pygame
-from framework import get_config
+from framework import get_config, add_on
 from counter import count
 
 def get_cloud(width=1000, height=600, num_clouds=random.randint(30, 40), opacity=(40, 100)):
@@ -65,21 +65,21 @@ back_fogs = []
 fore_fogs = []
 
 
+@add_on("fog")
 def fog_updating(screen, scroll):
 
-    if get_config("fog"):
-        if count.count%120 == 0:
-            if random.random() < 0.1:
-                rand = random.random()
-                if rand > 0.5:
-                    back_fogs.append(Fog(screen, scroll))
-                elif rand < 0.5:
-                    fore_fogs.append(Fog(screen, scroll, back=False))
+    if count.count%120 == 0:
+        if random.random() < 0.1:
+            rand = random.random()
+            if rand > 0.5:
+                back_fogs.append(Fog(screen, scroll))
+            elif rand < 0.5:
+                fore_fogs.append(Fog(screen, scroll, back=False))
 
-if get_config("fog"):
-    for i in range(0, 3):
-        rand = random.random()
-        if rand < 0.5:
-            back_fogs.append(Fog((400, 240), [0, 0]))
-        elif rand > 0.5:
-            fore_fogs.append(Fog((400, 240), [0, 0], back=False))
+# if get_config("fog"):
+#     for i in range(0, 3):
+#         rand = random.random()
+#         if rand < 0.5:
+#             back_fogs.append(Fog((400, 240), [0, 0]))
+#         elif rand > 0.5:
+#             fore_fogs.append(Fog((400, 240), [0, 0], back=False))
