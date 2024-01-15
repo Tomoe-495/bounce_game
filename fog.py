@@ -76,10 +76,10 @@ def fog_updating(screen, scroll):
             elif rand < 0.5:
                 fore_fogs.append(Fog(screen, scroll, back=False))
 
-# if get_config("fog"):
-#     for i in range(0, 3):
-#         rand = random.random()
-#         if rand < 0.5:
-#             back_fogs.append(Fog((400, 240), [0, 0]))
-#         elif rand > 0.5:
-#             fore_fogs.append(Fog((400, 240), [0, 0], back=False))
+if get_config("fog"):
+    for i in range(0, 3):
+        rand = random.random()
+        if rand < 0.5:
+            back_fogs.append(Fog((400, 240), [0, 0]))
+        elif rand > 0.5:
+            fore_fogs.append(Fog((400, 240), [0, 0], back=False))

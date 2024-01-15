@@ -13,7 +13,7 @@ def get_config(attri:str, sect="General") -> str|int:
 		return int(val)
 	except ValueError as e:
 		return val
-	
+
 def add_on(attri:str, sect:str="General"):
     def decorator(func):
         def wrapper(*args, **kwargs):
@@ -35,7 +35,7 @@ def color_change(surface, color):
 def get_map(filename):
 	with open(filename, 'r') as f:
 		return json.load(f)
-	
+
 def scale_image(img, factor):
     size = round(img.get_width() * factor), round(img.get_height() * factor)
     return pygame.transform.scale(img, size)

@@ -1,31 +1,9 @@
 import pygame
 
-class Spring:
-    def __init__(self, x, y):
-        self.x = x
-        self.y = y
-        self.rect = pygame.Rect(x, y, 1, 1)
-        self.vel = 0
-        self.acc = 0
-        self.bounce_amplitude = 0
+class Pond:
+    def __init__(self, points:list):
+        self.points = points
 
-    def update(self):
-        self.rect.y += self.vel
-
-        # Bouncing behavior
-        if self.rect.y < self.y - self.bounce_amplitude:
-            self.rect.y = self.y - self.bounce_amplitude
-            self.vel = abs(self.vel)  # Reverse the velocity to bounce back
-            self.bounce_amplitude = max(0, self.bounce_amplitude - 2)
-        elif self.rect.y > self.y + self.bounce_amplitude:
-            self.rect.y = self.y + self.bounce_amplitude
-            self.vel = -abs(self.vel)  # Reverse the velocity to bounce back
-            self.bounce_amplitude = max(0, self.bounce_amplitude - 2)
-
-    def rupple(self, vel):
-        self.vel = vel/2
-        self.acc = vel*.25
-        self.bounce_amplitude = 10 + vel
 
 class Water:
     def __init__(self, paths:list):
@@ -34,28 +12,18 @@ class Water:
 
     def get_points(self):
         points = []
-        for i in self.paths:
-            y = i["px"][1] + (i["height"]//2)
-            x = [i["px"][0], i["px"][0] + i["width"]]
-            point = [Spring(j, y) for j in range(x[0], x[1], 5)]
-            points.append(point)
+        for path in self.paths:
+            pts = [(i, path["px"][1] + (path["height"]//2)) for i in range(path["px"][0], path["px"][0] + path["width"], 2)]
+            points.append(pts)
         return points
-    
+
     def draw(self, win, scroll):
         for point in self.points:
-            pt = list(map(lambda x: (x.rect.x - scroll[0], x.rect.y - scroll[1]), point))
-            # pygame.draw.polygon(win, (71, 151, 232), pt, width=1)
-            pygame.draw.lines(win, (71, 151, 232), 0, pt, 1)
-        
+            pts = list(map(lambda x: (x[0] - scroll[0], x[1] - scroll[1]), point))
+            pygame.draw.lines(win, (72, 178, 223), 0, pts)
+
     def update(self, ball):
-        for point_group in self.points:
-            for i, pt in enumerate(point_group):
-                pt.update()
-
-                if ball.rect.colliderect(pt.rect):
-                    pt.rupple(ball.vel)
-
-
+        pass
 
 ''' ---- water object
 {
