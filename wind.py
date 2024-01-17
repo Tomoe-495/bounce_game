@@ -7,7 +7,7 @@ class Wind:
     acc = 0.001
 
     def update(self):
-        if 5 ==  random.randint(0, 500):
+        if 5 == random.randint(0, 500):
             self.speed = random.uniform(0.1, 1.0)
             print(f"new wind.pressure: {self.speed}")
 

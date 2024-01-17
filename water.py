@@ -1,8 +1,30 @@
 import pygame
 
 class Pond:
-    def __init__(self, points:list):
+    def __init__(self, points:list, height=64):
         self.points = points
+        self.pos = self.points[0][1]
+        self.acc = 1
+
+    def draw(self, win, scroll):
+        point = list(map(lambda x: (x[0] - scroll[0], x[1] - scroll[1]), self.points))
+        # pygame.draw.lines(win, (72, 178, 223), False, point)
+        pygame.draw.polygon(win, (72, 178, 223, 100), point)
+    
+    def update(self, ball):
+        for i, point in enumerate(self.points):
+            if ball.rect.collidepoint(point):
+                self.points[i][1] += ball.vel*0.8
+
+    def rupple(self):
+        for i, point in enumerate(self.points):
+            if point[1] > self.pos:
+                # point[1] -= self.acc
+                point[1] = max(self.pos, point[1] - self.acc)
+            elif point[1] < self.pos:
+                # point[1] += self.acc
+                point[1] = min(self.pos, point[1] + self.acc)
+
 
 
 class Water:
@@ -13,17 +35,18 @@ class Water:
     def get_points(self):
         points = []
         for path in self.paths:
-            pts = [(i, path["px"][1] + (path["height"]//2)) for i in range(path["px"][0], path["px"][0] + path["width"], 2)]
-            points.append(pts)
+            pts = [[i, path["px"][1] + (16//2)] for i in range(path["px"][0], path["px"][0] + path["width"], 8)]
+            points.append(Pond(pts))
         return points
 
     def draw(self, win, scroll):
         for point in self.points:
-            pts = list(map(lambda x: (x[0] - scroll[0], x[1] - scroll[1]), point))
-            pygame.draw.lines(win, (72, 178, 223), 0, pts)
+            point.draw(win, scroll)
 
     def update(self, ball):
-        pass
+        for point in self.points:
+            point.update(ball)
+            point.rupple()
 
 ''' ---- water object
 {

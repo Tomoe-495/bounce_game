@@ -69,12 +69,11 @@ class Tiles:
 
 	def get_tiles(self):
 		tiles = []
-		x = 0
-		y = 0
+		x = y = 0
 		for block in self.csv_map["intGridCsv"]:
 			if block != 0:
 				tiles.append([pygame.Rect(x, y, self.size, self.size), block])
-	
+
 			x += self.size
 
 			if x == self.csv_map["__cWid"] * self.size:

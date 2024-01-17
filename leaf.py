@@ -52,9 +52,9 @@ class Leaf:
         self.y += self.speed[1]
 
         if self.side:
-            self.angle = min(45, self.angle + 0.5)
+            self.angle = min(90, self.angle + 0.5)
         else:
-            self.angle = max(-45, self.angle - 0.5)
+            self.angle = max(-90, self.angle - 0.5)
 
         if self.count >= 120:
             if self.wind.pressure > 0.8:
