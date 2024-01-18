@@ -67,6 +67,13 @@ def main():
 					win = scale_screen(tile)
 				elif event.key == pygame.K_q:
 					win = scale_screen(tile, up=False)
+
+				if event.key == pygame.K_p:
+					x, y = tile.get_ball_pos()
+					ball.rect.x = x
+					ball.rect.y = y
+					ball.vel = 0
+					ball.speed = 0
 							
 			# if event.type == pygame.MOUSEBUTTONDOWN:
 			# 	if event.button == 1:

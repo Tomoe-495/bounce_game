@@ -8,8 +8,9 @@ class Pond:
 
     def draw(self, win, scroll):
         point = list(map(lambda x: (x[0] - scroll[0], x[1] - scroll[1]), self.points))
-        # pygame.draw.lines(win, (72, 178, 223), False, point)
-        pygame.draw.polygon(win, (72, 178, 223, 100), point)
+        # pygame.draw.polygon(win, (72, 178, 223), point)
+        pygame.draw.lines(win, (72, 178, 223), False, point)
+        
     
     def update(self, ball):
         for i, point in enumerate(self.points):
@@ -19,10 +20,8 @@ class Pond:
     def rupple(self):
         for i, point in enumerate(self.points):
             if point[1] > self.pos:
-                # point[1] -= self.acc
                 point[1] = max(self.pos, point[1] - self.acc)
             elif point[1] < self.pos:
-                # point[1] += self.acc
                 point[1] = min(self.pos, point[1] + self.acc)
 
 
