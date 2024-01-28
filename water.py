@@ -1,31 +1,56 @@
 import pygame
 
 class Pond:
-    def __init__(self, points:list, width, height):
-        self.points = points
-        self.pos = self.points[0][1]
+    def __init__(self, points, width, height):
         self.acc = 0.8
-        height *= 3
-        self.points += [ [self.points[-1][0], self.points[0][1] + height], [self.points[0][0], self.points[0][1] + height] ]
+
+        self.points = [ [i, points[1] + (16//2)] for i in range(points[0], points[0] + width, 10)]
+        self.pos = self.points[0][1]
+
+        self.surf = pygame.Surface((width, height+32))
+        self.surf.set_colorkey((0, 0, 0))
+        self.surf.set_alpha(100)
+        self.surf_pos = ([points[0], points[1]-16])
+
+        self.surf_points = [ [i, 24] for i in range(0, width, 10) ]
+        self.surf_fix_pos = self.surf_points[0][1]
+
+        self.surf_points += [
+            [width,  height+16],
+            [0,  height+16]
+        ]
 
 
     def draw(self, win, scroll):
+
+        self.surf.fill((0, 0, 0))
+        pygame.draw.polygon(self.surf, (72, 178, 223), self.surf_points)
+        win.blit(self.surf, (self.surf_pos[0] - scroll[0], self.surf_pos[1] - scroll[1]))
+
         point = list(map(lambda x: (x[0] - scroll[0], x[1] - scroll[1]), self.points))
-        # pygame.draw.lines(win, (72, 178, 223), True, point)
-        pygame.draw.polygon(win, (72, 178, 223, 10), point)
+        pygame.draw.lines(win, (92, 198, 223), False, point)
+        # pygame.draw.polygon(win, (72, 178, 223), point)
         
     
     def update(self, ball):
-        for i, point in enumerate(self.points[0:-2]):
+        for i, point in enumerate(self.points):
             if ball.rect.collidepoint(point):
                 self.points[i][1] += ball.vel*0.8
+                self.surf_points[i][1] += ball.vel*0.8
 
     def rupple(self):
-        for i, point in enumerate(self.points[0:-2]):
+
+        for i, point in enumerate(self.points):
             if point[1] > self.pos:
                 point[1] = max(self.pos, point[1] - self.acc)
             elif point[1] < self.pos:
                 point[1] = min(self.pos, point[1] + self.acc)
+                    
+        for point in self.surf_points[0:-2]:
+            if point[1] > self.surf_fix_pos:
+                point[1] = max(self.surf_fix_pos, point[1] - self.acc)
+            elif point[1] < self.surf_fix_pos:
+                point[1] = min(self.surf_fix_pos, point[1] + self.acc)
 
 
 
@@ -37,8 +62,7 @@ class Water:
     def get_points(self):
         points = []
         for path in self.paths:
-            pts = [[i, path["px"][1] + (16//2)] for i in range(path["px"][0], path["px"][0] + path["width"], 8)]
-            points.append(Pond(pts, path["width"], path["height"]))
+            points.append(Pond(path["px"], path["width"], path["height"]))
         return points
 
     def draw(self, win, scroll):

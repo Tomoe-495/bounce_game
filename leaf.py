@@ -84,5 +84,5 @@ class Leaf:
 
 @add_on("leaf")
 def updating_leaves(map_size, wind):
-    if count.count%10 == 0 and random.random() < 0.8:
+    if count.count%5 == 0 and random.random() < 0.8:
         leaves.append(Leaf(map_size, random.choice(colors), wind))

@@ -21,11 +21,18 @@ def get_tile_layer(map, layer, size, sprite):
 	map = get_obj(map, layer)
 	surf = pygame.Surface((size * map["__cWid"], size * map["__cHei"]))
 	surf.set_colorkey((0, 0, 0))
+	flips = [
+		(False, False),
+		(True, False),
+		(False, True),
+		(True, True)
+	]
 	# incoming data format
 	# { "px": [0,0], "src": [64,64], "f": 0, "t": 132, "d": [0] },
 	for tile in map["gridTiles"]:
 		s = sprite.get_sprite(tile["src"], size)
-		surf.blit(pygame.transform.flip(s, tile["f"], 0), tile['px'])
+		surf.blit(pygame.transform.flip(s, *flips[tile["f"]]), tile['px'])
+
 
 	return surf
 
@@ -99,12 +106,13 @@ class Tiles:
 
 		ball.draw(win, self.scroll)
 
-		self.water.draw(win, self.scroll)
-		win.blit(self.layerWater, (0 - self.scroll[0], 0 - self.scroll[1]))
 		win.blit(self.layerAssets, (0 - self.scroll[0], 0 - self.scroll[1]))
 
 		#	drawing leaves
 		leaf_draw(win, self.scroll)
+
+		self.water.draw(win, self.scroll)
+		win.blit(self.layerWater, (0 - self.scroll[0], 0 - self.scroll[1]))
 
 		win.blit(self.layerTiles, (0 - self.scroll[0], 0 - self.scroll[1]))
 
