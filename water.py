@@ -4,7 +4,7 @@ class Pond:
     def __init__(self, points, width, height):
         self.acc = 0.8
 
-        self.points = [ [i, points[1] + (16//2)] for i in range(points[0], points[0] + width, 10)]
+        self.points = [ [i, points[1] + (16//2)] for i in range(points[0], points[0] + width, 8) ]
         self.pos = self.points[0][1]
 
         self.surf = pygame.Surface((width, height+32))
@@ -12,7 +12,7 @@ class Pond:
         self.surf.set_alpha(100)
         self.surf_pos = ([points[0], points[1]-16])
 
-        self.surf_points = [ [i, 24] for i in range(0, width, 10) ]
+        self.surf_points = [ [i, 24] for i in range(0, width, 8) ]
         self.surf_fix_pos = self.surf_points[0][1]
 
         self.surf_points += [
